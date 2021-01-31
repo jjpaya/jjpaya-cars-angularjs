@@ -1,0 +1,15 @@
+<div class="page threads">
+	<div class="card">
+		<h2>Update thread</h2>
+		<hr>
+		<p>Please edit out the form to modify thread <?= $thr['thread_id'] ?>:</p>
+		<form id="thr-f-form" method="post">
+			<div><label>Subject: <input id="thr-f-sub" required maxlength="64" type="text" name="subject" value="<?= $thr['subject'] ?>"/></label></div>
+			<div><label>Expires: <input id="thr-f-exp" required type="date" name="expires" value="<?= $thr['expires'] ?>"/></label></div>
+			<div>Message:</div>
+			<div><textarea id="thr-f-msg" required maxlength="255" name="message"><?= $thr['message'] ?></textarea></div>
+			<div><input id="thr-f-create" type="submit" value="Update"/></div>
+		</form>
+		<a href="/threads">Go back</a>
+	</div>
+</div>

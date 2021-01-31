@@ -1,0 +1,14 @@
+<div class="page err-page err503">
+	<div class="card">
+		<h2>Whoops. An error occurred, try again later! (503)</h2>
+		<hr>
+		
+		<?php if ($e): ?>
+			<h3>Extra info:</h3>
+			<div><b>Message:</b> <?= $e->getMessage(); ?> (<?= $e->getCode(); ?>)</div>
+			<div><b>File:</b> <?= $e->getFile(); ?>:<?= $e->getLine(); ?></div>
+		<?php endif; ?>
+		
+		<p>Return to the <a href="/">Main page</a>?</p>
+	</div>
+</div>

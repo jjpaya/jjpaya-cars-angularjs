@@ -1,0 +1,29 @@
+<div class="page threads">
+	<div class="card">
+		<h2>Create thread</h2>
+		<hr>
+		<p>Please fill out the form to create a new thread:</p>
+		<form id="thr-f-form" method="post">
+			<label>
+				<span>Subject:</span>
+				<input id="thr-f-sub" required maxlength="64" type="text" name="subject"/>
+				<span class="err-msg">Subject must not be empty.</span>
+			</label>
+			
+			<label>
+				<span>Expires:</span>
+				<input id="thr-f-exp" required type="date" name="expires"/>
+				<span class="err-msg">Date must not be empty and must be in the future.</span>
+			</label>
+
+			<label>
+				<span>Message:</span>
+				<textarea id="thr-f-msg" required maxlength="255" name="message"></textarea>
+				<span class="err-msg">Message must not be empty.</span>
+			</label>
+			
+			<div><input id="thr-f-create" type="submit" value="Create"/></div>
+		</form>
+		<a href="/threads">Go back</a>
+	</div>
+</div>

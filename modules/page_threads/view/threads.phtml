@@ -1,0 +1,32 @@
+<!-- Read Modal -->
+<div id="dialog" class="dialog" title="Read thread"></div>
+<div class="page threads">
+	<div class="card">
+		<h2>Active Threads</h2>
+		<hr>
+		<p>You can view the active threads below,
+		or <a href="<?= $thr_new_action; ?>">Create a new thread</a>.</p> 
+	</div>
+	<?php while ($thr = $next_thread()): ?>
+		<div class="card thread">
+			<div>
+				<b><?= $thr['thread_id'] ?> - <?= $thr['subject']; ?></b>
+				<span>Created: <?= $thr['created']; ?></span>
+				<span>Expires: <?= $thr['expires']; ?></span>
+				<button data-tid="<?= $thr['thread_id'] ?>" class="read-thr-btn">Read</button>
+				<form method="post">
+					<input type="hidden" name="id" value="<?= $thr['thread_id'] ?>">
+					<input type="hidden" name="op" value="del">
+					<input type="submit" value="Delete">
+				</form>
+				<form method="post">
+					<input type="hidden" name="id" value="<?= $thr['thread_id'] ?>">
+					<input type="hidden" name="op" value="upd">
+					<input type="submit" value="Update">
+				</form>
+			</div>
+			<hr>
+			<p><?= $thr['message']; ?></p>
+		</div>
+	<?php endwhile; ?>
+</div>

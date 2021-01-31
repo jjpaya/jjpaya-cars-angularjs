@@ -1,0 +1,47 @@
+body {
+	display: flex;
+	/* vh = porcentaje de la altura de la pantalla. El % no siempre funciona */
+	min-height: 100vh;
+	margin: 0;
+	font-family: sans-serif;
+	flex-direction: column;
+	background-image: url("/modules/common/view/img/pattern.png");
+}
+
+.dialog {
+	display: none;
+}
+
+.page {
+	/* Permite que ocupe el resto de la pantalla entre la cabecera y pie */
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	margin: 5vh 5vw;
+}
+
+.page .card {
+	margin-bottom: 2.5vh;
+	border: 1px solid #36393e;
+	border-radius: 7px;
+	background-color: #FDFDFD;
+	box-shadow: 0 0 3px 0;
+	padding: 10px;
+}
+
+.footer {
+	flex: 0 0 5vh;
+	display: flex;
+	align-items: center;
+	/* Para que los elementos se distribuyan entre todo el espacio automaticamente */
+	justify-content: space-between;
+	min-height: 24px;
+	border-top: 1px dotted #36393e;
+	background-color: #FFFFFF55;
+	margin: 0 5vw;
+	color: #555;
+}
+
+.footer span {
+	margin: 0 20px;
+}

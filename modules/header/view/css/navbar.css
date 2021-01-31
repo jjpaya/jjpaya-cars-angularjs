@@ -1,0 +1,63 @@
+
+.header {
+	display: flex;
+	/* no se puede expandir, ni contraer, y ocupa el 10% de la altura de la pantalla */
+	flex: 0 0 10vh;
+	min-height: 50px;
+	background-color: #000;
+	/* alinea verticalmente los elementos de la cabecera */
+	align-items: center;
+	background: linear-gradient(to bottom, #36393e 0%, #262626 100%);
+	border-bottom: 1px solid #36393e;
+	/* Le da sombra a la cabecera */
+	box-shadow: 0 0 9px 0;
+}
+
+.header > img {
+	/* Usaría max-height: 80%; pero no funciona en este caso. */
+	max-height: 8vh;
+	min-height: 32px;
+	margin: 0 2vw 0 2vw;
+}
+
+.header .nav {
+	text-align: center;
+	line-height: 2;
+}
+
+.header .nav a {
+	font-size: 18px;
+	color: #FFF;
+	padding: 1.5vh;
+	text-decoration: none;
+	border-radius: 5px;
+}
+
+/* Para la pagina actual... */
+.header .nav a.current {
+	border-bottom: 3px solid #DDD;
+}
+
+.header .nav a:hover {
+	background-color: #DDDDDD22;
+}
+
+
+.header .lang {
+	margin-left: auto;
+}
+
+.header .lang a {
+	text-decoration: none;
+}
+
+.header .lang a img {
+	max-width: 24px;
+	margin-right: 8px;
+	border-radius: 50px;
+}
+
+.header .lang a img:hover {
+	color: #FFF;
+	box-shadow: 0 0 5px 0;
+}

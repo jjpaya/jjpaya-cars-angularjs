@@ -1,0 +1,18 @@
+label {
+	display: block;
+}
+
+.err-msg {
+	display: none;
+	color: red;
+	font-size: 10pt;
+}
+
+input.fail + .err-msg, textarea.fail + .err-msg {
+	display: inline;
+}
+
+input.fail, textarea.fail {
+	border-color: red;
+	border-width: 2px;
+}
