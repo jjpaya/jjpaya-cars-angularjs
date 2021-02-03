@@ -8,7 +8,7 @@
 	Database::set_default_details('jjpaya', 'jjpaya', 'forum');
 
 	$r = new MvcRouter;
-	$r->set_page_brand('JJPaya Forum');
+	$r->set_page_brand('JJPaya Cars');
 	$r->set_page_mvc_content(array(
 		mvc_load_mod('common'),
 		mvc_load_mod('header'),

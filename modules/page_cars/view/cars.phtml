@@ -1,0 +1,50 @@
+<div class="page cars">
+	<div class="card">
+		<h2>Car Listings</h2>
+		<hr>
+		<p>You can view the available cars below,
+		or <a href="<?= $car_new_action ?>">Create a new listing</a>.</p> 
+	</div>
+	<div class="card car">
+		<table id="car-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Number plate</th>
+					<th>Created</th>
+					<th>Brand name</th>
+					<th>Model</th>
+					<th>KMs</th>
+					<th>Price</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php while ($car = $next_car()): ?>
+				<tr>
+					<td><?= $car['car_id'] ?></td>
+					<td><?= $car['num_plate'] ?></td>
+					<td><?= $car['created'] ?></td>
+					<td><?= $car['brand_name'] ?></td>
+					<td><?= $car['model'] ?></td>
+					<td><?= $car['kms'] ?></td>
+					<td><?= floatval($car['price_eur_cent']) / 100.0 ?> €</td>
+					<td>
+						<button data-tid="<?= $car['car_id'] ?>" class="read-car-btn">Read</button>
+						<form method="post">
+							<input type="hidden" name="id" value="<?= $car['car_id'] ?>">
+							<input type="hidden" name="op" value="del">
+							<input type="submit" value="Delete">
+						</form>
+						<form method="post">
+							<input type="hidden" name="id" value="<?= $car['car_id'] ?>">
+							<input type="hidden" name="op" value="upd">
+							<input type="submit" value="Update">
+						</form>
+					</td>
+				</tr>
+			<?php endwhile; ?>
+			</tbody>
+		</table>
+	</div>
+</div>

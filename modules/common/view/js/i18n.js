@@ -2,12 +2,9 @@
 
 var langs = {};
 
-function loadLang(key) {
+async function loadLang(key) {
 	return langs[key]
-	? Promise.resolve(langs[key])
-	: $$.ajax(`/modules/common/view/i18n/${key}.json`)
-		.then(r => r.json())
-		.then(data => langs[key] = data);
+		|| (langs[key] = await $$.fjson(`/modules/common/view/i18n/${key}.json`));
 }
 
 function applyLang(data) {
@@ -44,26 +41,20 @@ function pickLangs(data) {
 }
 
 function bindLangSwitchers() {
-	for (const el of $$('[data-tr-switch]')) {
-		el.onclick = () => {
-			selectLang(el.getAttribute('data-tr-switch'));
-		};
-	}
+	$$('[data-tr-switch]')
+		.click((e, el) => selectLang(el.getAttribute('data-tr-switch')));
 }
 
-function loadLangs() {
-	var selected = pickLangs([getStoredLangOrDefault(), ...(navigator.languages || []), 'en']);
-
-	$$.ajax('/modules/common/view/i18n/available.json')
-		.then(r => r.json())
-		.then(data => {
-			for (const ln of selected) {
-				if (data.indexOf(ln) !== -1) {
-					selectLang(ln);
-					break;
-				}
-			}
-		});
+async function loadLangs() {
+	const selected = pickLangs([getStoredLangOrDefault(), ...(navigator.languages || []), 'en']);
+	const data = await $$.fjson('/modules/common/view/i18n/available.json');
+	
+	for (const ln of selected) {
+		if (data.indexOf(ln) !== -1) {
+			selectLang(ln);
+			break;
+		}
+	}
 }
 
 ready(() => {
