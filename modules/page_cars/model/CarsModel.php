@@ -19,8 +19,8 @@ EOQ
 			);
 			
 			/*$this->db->pquery(<<<'EOQ'
-				CREATE TABLE IF NOT EXISTS car_models (
-					brand_id BIGINT UNSIGNED,
+				CREATE TABLE IF NOT EXISTS car_tags (
+					tag_id BIGINT UNSIGNED,
 					model_id SERIAL,
 					name VARCHAR(24) NOT NULL CHECK (name REGEXP '^[a-z0-9 ]+$')
 				)
@@ -33,7 +33,7 @@ EOQ
 					num_plate VARCHAR(7) NOT NULL UNIQUE CHECK (num_plate REGEXP '[0-9]{4}[A-Z]{3}'),
 					reg_date DATE NOT NULL,
 					brand_id BIGINT UNSIGNED NOT NULL,
-					model VARCHAR(24) NOT NULL CHECK (model REGEXP '^[a-z0-9 ]+$'),
+					model VARCHAR(24) NOT NULL CHECK (model REGEXP '^[a-zA-Z0-9 ]+$'),
 					color VARCHAR(7) NOT NULL CHECK (color REGEXP '^#[a-zA-Z0-9]{6}$'),
 					kms INT NOT NULL DEFAULT 0 CHECK (kms >= 0 AND kms <= 999999),
 					itv BOOLEAN NOT NULL,

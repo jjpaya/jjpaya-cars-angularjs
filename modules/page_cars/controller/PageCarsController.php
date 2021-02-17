@@ -51,7 +51,7 @@
 			} catch (Exception $e) {
 				// duplicate errc: 1062
 				// constraint errc: 4025
-				die($e->getMessage());
+				//die($e->getMessage());
 				header('Location: /cars/create#error-' . $e->getCode(), true, 303);
 			}
 			

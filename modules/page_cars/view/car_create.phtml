@@ -1,4 +1,12 @@
 <div class="page cars">
+	<div class="err-msgs">
+		<div id="error-1062" class="card">
+			A car with that number plate already exists!
+		</div>
+		<div id="error-4025" class="card">
+			The data submitted is not correct.
+		</div>
+	</div>
 	<div class="card">
 		<h2>Create car</h2>
 		<hr>
@@ -6,8 +14,8 @@
 		<form id="car-f-form" method="post">
 			<label>
 				<span>Number Plate:</span>
-				<input id="car-f-npl" required maxlength="7" type="text" name="num_plate"/>
-				<span class="err-msg">The number plate must not be empty.</span>
+				<input id="car-f-npl" required pattern="[0-9]{4}[A-Z]{3}" maxlength="7" type="text" name="num_plate"/>
+				<span class="err-msg">The number plate must not be empty and must match the format 1234ABC.</span>
 			</label>
 			
 			<label>
@@ -28,8 +36,8 @@
 			
 			<label>
 				<span>Model:</span>
-				<input id="car-f-mdl" required maxlength="24" type="text" name="model"/>
-				<span class="err-msg">Model must not be empty.</span>
+				<input id="car-f-mdl" required pattern="^[a-zA-Z0-9 ]+$" maxlength="24" type="text" name="model"/>
+				<span class="err-msg">Model must not be empty and not contain special characters.</span>
 			</label>
 			
 			<label>
@@ -50,7 +58,7 @@
 			
 			<div>
 				<span>Wheel Power:</span>
-				<input id="car-f-wp-fr" type="radio" name="wheel_power" value="front"/>
+				<input id="car-f-wp-fr" type="radio" name="wheel_power" value="front" checked/>
 				<label for="car-f-wp-fr">Front</label>
 				
 				<input id="car-f-wp-re" type="radio" name="wheel_power" value="rear"/>

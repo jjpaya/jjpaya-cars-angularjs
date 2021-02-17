@@ -31,7 +31,7 @@
 					<td><?= floatval($car['price_eur_cent']) / 100.0 ?> €</td>
 					<td>
 						<button data-tid="<?= $car['car_id'] ?>" class="read-car-btn">Read</button>
-						<form method="post">
+						<form method="post" class="del-car-btn">
 							<input type="hidden" name="id" value="<?= $car['car_id'] ?>">
 							<input type="hidden" name="op" value="del">
 							<input type="submit" value="Delete">

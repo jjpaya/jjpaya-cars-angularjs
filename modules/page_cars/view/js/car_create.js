@@ -1,12 +1,19 @@
 'use strict';
 
 window.onload = () => {
-	var [esub, eexp, emsg, eform, ecreate] = [
-		'thr-f-sub',
-		'thr-f-exp',
-		'thr-f-msg',
-		'thr-f-form',
-		'thr-f-create'
+	var validatedFormInputs = [
+		'car-f-npl',
+		'car-f-rdat',
+		'car-f-brn',
+		'car-f-mdl',
+		'car-f-kms',
+		'car-f-pri',
+		'car-f-desc'
+	].map(i => document.getElementById(i));
+	
+	var [carForm, carCreate] = [
+		'car-f-form',
+		'car-f-create'
 	].map(i => document.getElementById(i));
 
 	function red(f, el) {
@@ -18,11 +25,22 @@ window.onload = () => {
 		el.classList.add('fail');
 	}
 	
-	ecreate.onclick = eform.onsubmit = e => {
-		var res = [esub, eexp, emsg]
-			.map(red.bind(null, el => el.value.length > 0))
-			.reduce((a, b) => a && b, true)
-			& red(el => (new Date(el.value)).getTime() > (new Date()).getTime(), eexp);
+	function maybeCheckPattern(el) {
+		var pat = el.getAttribute('pattern');
+		
+		if (pat) {
+			var rgx = new RegExp(pat);
+			
+			return rgx.test(el.value);
+		}
+		
+		return true;
+	}
+	
+	carCreate.onclick = carForm.onsubmit = e => {
+		var res = validatedFormInputs
+			.map(red.bind(null, el => el.value.length > 0 && maybeCheckPattern(el)))
+			.reduce((a, b) => a && b, true);
 			
 		if (!res) {
 			e.preventDefault();

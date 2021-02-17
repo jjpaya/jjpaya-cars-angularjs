@@ -10,33 +10,43 @@ function escapehtml(unsafe) {
 		.replace(/'/g, "&#039;");
 }
 
-function showModal(data, title = '') {
+function showModal(data, title = '', opts = {}) {
+	if (!opts.title) {
+		opts.title = title;
+	}
+	
 	console.log(data);
 	var elems = '';
 	
-	for (const key in data) {
-		var name = key.replace(/_/g, ' ')
-				.replace(/^./, key[0].toUpperCase());
-		
-		elems +=
-		`<div>
-			<span>${escapehtml('' + name)}: </span>
-			<span>${escapehtml('' + data[key])}</span>
-		</div>`;
+	if (typeof data === 'string') {
+		elems = data;
+	} else {
+		for (const key in data) {
+			var name = key.replace(/_/g, ' ')
+					.replace(/^./, key[0].toUpperCase());
+			
+			elems +=
+			`<div>
+				<span>${escapehtml('' + name)}: </span>
+				<span>${escapehtml('' + data[key])}</span>
+			</div>`;
+		}
 	}
 	
     $('#dialog')
-    	.attr('title', title)
     	.html(elems)
-    	.dialog();
+    	.dialog(opts);
 }
 
-function showErrorModal(e, title = 'Error') {
+function showErrorModal(e, title = 'Error', opts = {}) {
+	if (!opts.title) {
+		opts.title = title;
+	}
+	
 	console.log(e);
 	$('#dialog')
-		.attr('title', title)
 		.html(e)
-		.dialog();
+		.dialog(opts);
 }
 
 // jQuery 2.0

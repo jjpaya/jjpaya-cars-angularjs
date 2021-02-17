@@ -2,6 +2,20 @@ form > label {
 	display: block;
 }
 
+div.err-msgs > div {
+	display: none;
+}
+
+div.err-msgs > div::before {
+	content: 'Error: ';
+	color: darkred;
+}
+
+div.err-msgs > div:target {
+	display: block;
+	color: red;
+}
+
 .err-msg {
 	display: none;
 	color: red;
