@@ -2,10 +2,11 @@
 	require_once 'libs/utils/includes.php';
 	assert_add_to_include_path($_SERVER['DOCUMENT_ROOT']);
 	
+	require_once 'private/Config.php';
 	require_once 'libs/db/inc.php';
 	require_once 'libs/mvc/inc.php';
 
-	Database::set_default_details('jjpaya', 'jjpaya', 'forum');
+	Config::load_config('private/credentials.json');
 
 	$r = new MvcRouter;
 	$r->set_page_brand('JJPaya Cars');

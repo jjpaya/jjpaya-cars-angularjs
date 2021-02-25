@@ -69,5 +69,9 @@
 			Database::$pass = $pass;
 			Database::$db = $db;
 		}
+		
+		public static function set_default_details_json(array $details) : void {
+			set_default_details($details['user'], $details['pass'], $details['name']);
+		}
 	}
 ?>
