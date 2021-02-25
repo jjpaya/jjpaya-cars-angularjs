@@ -7,28 +7,28 @@
 		private bool $is_content;
 
 		public function __construct() {
-			$rc = new ReflectionClass(static::class);
-			$is_content = false;
+			$this->rc = new ReflectionClass(static::class);
+			$this->is_content = false;
 
-			$name = $rc->getShortName();
-			if (str_starts_with($name, 'Page')) {
-				$name = substr($name, 4);
-				$is_content = true;
+			$this->name = $this->rc->getShortName();
+			if (str_starts_with($this->name, 'Page')) {
+				$this->name = substr($this->name, 4);
+				$this->is_content = true;
 			}
 
-			if (str_ends_with($name, 'Controller')) {
-				$name = substr($name, 0, -10);
+			if (str_ends_with($this->name, 'Controller')) {
+				$this->name = substr($this->name, 0, -10);
 			}
 		}
 
 		public function get_title() : string {
-			return $is_content ? $name : '';
+			return $this->is_content ? $this->name : '';
 		}
 
 		private function try_file_include(string $path) : bool {
-			if (file_exists($path . '.phtml') {
+			if (file_exists($path . '.phtml')) {
 				$path .= '.phtml';
-			} else if (file_exists($path . '.html') {
+			} else if (file_exists($path . '.html')) {
 				$path .= '.html';
 			} else {
 				return false;
@@ -40,13 +40,13 @@
 		}
 
 		public function handle_get_head() : void {
-			$path = dirname($rc->getFileName(), 2) . '/view/' . strtolower($name) . '_head';
-			try_file_include($path);
+			$path = dirname($this->rc->getFileName(), 2) . '/view/' . strtolower($this->name) . '_head';
+			$this->try_file_include($path);
 		}
 
-		public function handle_get_body() : void {
-			$path = dirname($rc->getFileName(), 2) . '/view/' . strtolower($name) . '_body';
-			try_file_include($path);
+		public function handle_get_body() : bool {
+			$path = dirname($this->rc->getFileName(), 2) . '/view/' . strtolower($this->name) . '_body';
+			return $this->try_file_include($path);
 		}
 	}
 ?>
