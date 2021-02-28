@@ -71,7 +71,7 @@
 		}
 		
 		public static function set_default_details_json(array $details) : void {
-			set_default_details($details['user'], $details['pass'], $details['name']);
+			Database::set_default_details($details['user'], $details['pass'], $details['name']);
 		}
 	}
 ?>

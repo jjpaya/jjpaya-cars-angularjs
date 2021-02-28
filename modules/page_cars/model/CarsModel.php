@@ -46,6 +46,17 @@ EOQ
 				)
 EOQ
 			);
+			
+			$this->db->pquery(<<<'EOQ'
+				CREATE TABLE IF NOT EXISTS car_images (
+					img_id SERIAL PRIMARY KEY,
+					car_id BIGINT UNSIGNED,
+					path VARCHAR(255) NOT NULL,
+					
+					FOREIGN KEY(car_id) REFERENCES cars (car_id) ON DELETE CASCADE
+				)
+EOQ
+			);
 		}
 		
 		public function get_all_brands() : mysqli_result {
@@ -55,6 +66,25 @@ EOQ
 				ORDER BY name ASC
 EOQ
 			);
+		}
+		
+		public function get_brands_paged(int $page, int $limit = 4) : mysqli_result {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT *
+				FROM car_brands
+				ORDER BY name ASC
+				LIMIT ?
+				OFFSET ?
+EOQ
+			, $limit, ($page - 1) * $limit);
+		}
+		
+		public function get_total_brands() : int {
+			return intval($this->db->pquery(<<<'EOQ'
+				SELECT COUNT(*)
+				FROM car_brands
+EOQ
+			)->fetch_array()[0]);
 		}
 		
 		public function get_all_cars() : mysqli_result {
@@ -67,9 +97,35 @@ EOQ
 			);
 		}
 		
+		public function get_cars_paged(int $page, int $limit = 10) : mysqli_result {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT c.*, br.name AS brand_name
+				FROM cars AS c
+				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
+				ORDER BY car_id DESC
+				LIMIT ?
+				OFFSET ?
+EOQ
+			, $limit, ($page - 1) * $limit);
+		}
+		
+		public function get_total_cars() : int {
+			return intval($this->db->pquery(<<<'EOQ'
+				SELECT COUNT(*)
+				FROM cars
+EOQ
+			)->fetch_array()[0]);
+		}
+		
+		
 		public function get_car(int $cid) : ?array {
 			return $this->db->pquery('SELECT * FROM cars WHERE car_id = ?', $cid)
 					->fetch_assoc() ?? null;
+		}
+		
+		public function get_car_imgs(int $cid) : array {
+			return $this->db->pquery('SELECT * FROM car_images WHERE car_id = ?', $cid)
+					->fetch_all(MYSQLI_ASSOC) ?? array();
 		}
 		
 		public function create_car_brand(?string $name, ?string $img) : void {

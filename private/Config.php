@@ -1,4 +1,8 @@
 <?php
+	require_once 'libs/utils/misc.php';
+	require_once 'libs/db/inc.php';
+	
+
 	class Config {
 		private static ?string $maps_api_key = null;
 		

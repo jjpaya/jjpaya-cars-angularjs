@@ -10,6 +10,15 @@ function escapehtml(unsafe) {
 		.replace(/'/g, "&#039;");
 }
 
+function mkHTML(tag, opts) {
+	var elm = document.createElement(tag);
+	for (var i in opts) {
+		elm[i] = opts[i];
+	}
+	
+	return elm;
+}
+
 function showModal(data, title = '', opts = {}) {
 	if (!opts.title) {
 		opts.title = title;

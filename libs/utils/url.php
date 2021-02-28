@@ -1,7 +1,7 @@
 <?php
 	function get_split_uri(int $skip = 0) : array {
 		$arr = array_values(array_filter(
-				explode('/', $_SERVER['REQUEST_URI']), function($el) {
+				explode('/', strtok($_SERVER["REQUEST_URI"], '?')), function($el) {
 			return $el !== '';
 		}));
 		
