@@ -1,6 +1,9 @@
 'use strict';
 
 var carousel = null;
+var scroller = null;
+var scrollerPage = 1;
+var scrollerEnd = false;
 
 function populateCarousel() {
 	$$.fjson('/cars/api/cars')
@@ -44,7 +47,50 @@ function initCarousel() {
 	});
 }
 
+function loadMoreBrandsScroller() {
+	if (scrollerEnd) {
+		return;
+	}
+	
+	$$.fjson('/cars/api/brands?page=' + scrollerPage)
+	.then(brands => {
+		if (brands.length === 0) {
+			scrollerEnd = true;
+			return;
+		}
+		
+		console.log(brands);
+		
+		for (var brand of brands) {
+			var el = mkHTML('div', {
+				className: 's-brand',
+				style: 'background-image: url("' + brand.img +'");',
+				onclick: (brandid => e => {
+					console.log(brandid);
+				})(brand.brand_id)
+			});
+			
+			scroller.appendChild(el);
+		}
+		
+	});
+	
+	scrollerPage++;
+}
+
+function initBrandsScroller() {
+	scroller = $$('#brand-scroller')[0];
+	window.onscroll = ev => {
+	    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+	        loadMoreBrandsScroller();
+	    }
+	};
+}
+
 ready(() => {
 	initCarousel();
 	populateCarousel();
+	
+	initBrandsScroller();
+	loadMoreBrandsScroller();
 })

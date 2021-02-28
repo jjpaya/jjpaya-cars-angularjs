@@ -97,6 +97,19 @@ EOQ
 			);
 		}
 		
+		public function find_cars(string $containing, int $limit = 10) : mysqli_result {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT c.*, br.name AS brand_name
+				FROM cars AS c
+				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
+				WHERE CONCAT(br.name, model) LIKE CONCAT('%', ?, '%')
+				ORDER BY br.name DESC, model DESC, car_id DESC
+				LIMIT ?
+EOQ
+			, $containing, $limit);
+		}
+	
+		
 		public function get_cars_paged(int $page, int $limit = 10) : mysqli_result {
 			return $this->db->pquery(<<<'EOQ'
 				SELECT c.*, br.name AS brand_name

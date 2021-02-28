@@ -16,7 +16,7 @@
 			$this->add_route('brands', new class($mdl) extends ApiDbEndpoint {
 				public function handle_get() : bool {
 					$page = $_GET['page'] ?? 1;
-					echo json_encode($this->mdl->get_brands_paged($page)
+					echo json_encode($this->mdl->get_brands_paged($page, )
 							->fetch_all(MYSQLI_ASSOC));
 					
 					return true;
@@ -53,6 +53,22 @@
 					return true;
 				}
 			});
+			
+			$this->add_route('cars/search', new class($mdl) extends ApiDbEndpoint {
+				public function handle_get() : bool {
+					$query = $_GET['q'] ?? null;
+					
+					if (is_null($query)) {
+						echo '[]';
+						return true;
+					}
+					
+					echo json_encode($this->mdl->find_cars($query)
+							->fetch_all(MYSQLI_ASSOC));
+					return true;
+				}
+			});
+			
 		}
 	}
 ?>
