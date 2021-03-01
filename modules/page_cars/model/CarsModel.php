@@ -41,6 +41,8 @@ EOQ
 					price_eur_cent INT NOT NULL CHECK (price_eur_cent >= 10000 AND price_eur_cent <= 500000000),
 					created DATE NOT NULL DEFAULT CURDATE(),
 					description VARCHAR(255) NOT NULL,
+					lat DOUBLE,
+					lon DOUBLE,
 					
 					FOREIGN KEY(brand_id) REFERENCES car_brands (brand_id)
 				)

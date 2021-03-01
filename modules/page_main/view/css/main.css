@@ -17,10 +17,16 @@
 	opacity: 0.9;
 }
 
+.c-car-name {
+	text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
+    color: #FFF;
+}
 
 .c-car-price {
 	opacity: 0.8;
 	font-size: 7pt;
+	color: #FFF;
+	text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
 }
 
 .c-car-price:before {
