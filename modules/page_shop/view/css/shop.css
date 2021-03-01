@@ -1,0 +1,51 @@
+.shop > div:not(.shown) {
+	display: none;
+}
+
+.shop > div.shown {
+	display: grid;
+	column-gap: 10px;
+}
+
+.shop-view {
+	grid-template-rows: fit-content auto min-content;
+	grid-template:
+        "g l"
+        "f l"
+        "f p"
+        / min-content auto;
+}
+
+.gmaps {
+	grid-area: g;
+}
+.filters {
+	grid-area: f;
+}
+.listing {
+	grid-area: l;
+}
+.view-footer {
+	grid-area: p;
+}
+
+.details-view {
+	grid-template:
+        "h h"
+        "i r"
+        "d r"
+        / auto min-content;
+}
+
+.det-head {
+	grid-area: h;
+}
+.item-imgs {
+	grid-area: i;
+}
+.item-desc {
+	grid-area: d;
+}
+.related {
+	grid-area: r;
+}

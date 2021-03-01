@@ -10,7 +10,7 @@ function escapehtml(unsafe) {
 		.replace(/'/g, "&#039;");
 }
 
-function mkHTML(tag, opts) {
+function mkHTML(tag, opts = {}) {
 	var elm = document.createElement(tag);
 	for (var i in opts) {
 		elm[i] = opts[i];
@@ -58,6 +58,34 @@ function showErrorModal(e, title = 'Error', opts = {}) {
 		.dialog(opts);
 }
 
+window.hashStorage = {
+	data: {},
+	save() {
+		location.hash = JSON.stringify(this.data);
+	},
+	del(key) {
+		delete this.data[key];
+		this.save();
+	},
+	set(key, val) {
+		this.data[key] = val;
+		this.save();
+	},
+	get(key) {
+		return this.data[key];
+	}
+};
+
+function tryLoadHashStorage() {
+	try {
+		hashStorage.data = JSON.parse(location.hash.slice(1));
+	} catch (e) { }
+}
+
+function deselectable() {
+	setTimeout(checked => this.checked = !checked, 0, this.checked);
+}
+
 // jQuery 2.0
 function addfuncs(arr) {
 	const bindEvt = (elm, evt, fn) => elm.addEventListener(evt, e => fn(e, elm));
@@ -74,3 +102,5 @@ window.ready = f => window.addEventListener('load', f);
 
 window.$$.fetch = (...args) => fetch(...args);
 window.$$.fjson = async (...args) => (await fetch(...args)).json();
+
+tryLoadHashStorage();

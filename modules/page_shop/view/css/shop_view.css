@@ -1,0 +1,44 @@
+.shop-view .gmaps {
+	height: 200px;
+}
+
+.filters b {
+	display: block;
+}
+
+.filters > div {
+	position: sticky;
+	top: 10px;
+}
+
+/*.filters > * {
+	width: 100%;
+}*/
+
+.l-item {
+	width: 100%;
+	background-position: center;
+	background-size: cover;
+	/* background-repeat: no-repeat; */
+	height: 25vh;
+	border: 1px solid #777;
+	box-shadow: inset 0px 0px 2px 0px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	display: flex;
+	background-color: #DDD;
+	margin-bottom: 5px;
+}
+
+.l-item:not(:active):hover {
+	opacity: 0.9;
+}
+
+.l-item > img {
+	margin: 5px;
+}
+
+.l-item > div {
+	flex-grow: 1;
+	margin-right: 5px;
+}

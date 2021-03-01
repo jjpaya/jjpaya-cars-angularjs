@@ -31,7 +31,7 @@
 			}
 			
 			if (is_null($controller)) {
-				$controller = $this->routes['/'];
+				$controller = $this->routes['/'] ?? null;
 			}
 
 			return $controller;
