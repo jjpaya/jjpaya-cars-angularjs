@@ -62,6 +62,9 @@ window.hashStorage = {
 	data: {},
 	save() {
 		location.hash = JSON.stringify(this.data);
+		if (location.hash.length <= 3) {
+			location.hash = "";
+		}
 	},
 	del(key) {
 		delete this.data[key];
@@ -78,12 +81,8 @@ window.hashStorage = {
 
 function tryLoadHashStorage() {
 	try {
-		hashStorage.data = JSON.parse(location.hash.slice(1));
+		hashStorage.data = JSON.parse(decodeURI(location.hash).slice(1));
 	} catch (e) { }
-}
-
-function deselectable() {
-	setTimeout(checked => this.checked = !checked, 0, this.checked);
 }
 
 // jQuery 2.0
@@ -93,6 +92,8 @@ function addfuncs(arr) {
 	// bind fn to ev on all selected elems
 	arr.on = (ev, fn) => (arr.forEach(elm => bindEvt(elm, ev, fn)), arr);
 	arr.click = fn => arr.on('click', fn);
+	arr.text = v => (arr.forEach(elm => elm.innerText = v), arr);
+	arr.html = v => (arr.forEach(elm => elm.innerHTML = v), arr);
 	
 	return arr;
 }

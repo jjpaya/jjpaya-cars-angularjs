@@ -31,10 +31,10 @@
 
 .details-view {
 	grid-template:
-        "h h"
-        "i r"
-        "d r"
-        / auto min-content;
+        "h"
+        "i"
+        "d"
+        "r";
 }
 
 .det-head {

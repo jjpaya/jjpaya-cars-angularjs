@@ -17,6 +17,7 @@ function populateCarousel() {
 				style: 'background-image: url("' + img +'");',
 				onclick: (carid => e => {
 					console.log(carid);
+					window.location.href = "/shop#" + JSON.stringify({view: carid});
 				})(car.car_id)
 			});
 			
@@ -67,6 +68,9 @@ function loadMoreBrandsScroller() {
 				style: 'background-image: url("' + brand.img +'");',
 				onclick: (brandid => e => {
 					console.log(brandid);
+					window.location.href = "/shop#" + JSON.stringify({
+						filters: {brand: brandid}
+					});
 				})(brand.brand_id)
 			});
 			

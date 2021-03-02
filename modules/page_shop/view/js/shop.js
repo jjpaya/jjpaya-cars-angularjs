@@ -1,11 +1,112 @@
 'use strict';
 
+var gkey = null;
 var shoplist = null;
 var shopfooter = null;
 var shopmap = null;
 var currmarkers = [];
 var currpage = 1;
-// google.maps.Marker, LatLng addListener
+var brandmap = {};
+
+async function populateRelatedBooks(car) {
+	var query = encodeURIComponent(brandmap[car.brand_id].name + ' ' + car.model);
+	
+	var books = await $$.fjson(`https://www.googleapis.com/books/v1/volumes?q=${query}&key=${gkey}`);
+	console.log(books);
+	
+	var rel = $$('.details-view > .related')[0];
+	
+	rel.innerHTML = "";
+	
+	for (var book of books.items) {
+		var inf = book.volumeInfo;
+		
+		var c = mkHTML('div', {className: 'book'});
+		var lnk = mkHTML('a', {href: inf.infoLink});
+		
+		c.appendChild(lnk);
+		
+		if (inf.imageLinks) {
+			lnk.appendChild(mkHTML('img', {
+				src: inf.imageLinks.smallThumbnail
+			}));
+		}
+		
+		lnk.appendChild(mkHTML('div', {
+			innerText: inf.title,
+			className: 'book-title'
+		}));
+		
+		rel.appendChild(c);
+	}
+	
+	new Glider(rel, {
+		slidesToShow: 5,
+		slidesToScroll: 5,
+		draggable: true
+	});
+}
+
+function switchViews(on_details) {
+	var ops = ['add', 'remove'];
+	$$('.shop-view')[0].classList[ops[+on_details]]('shown');
+	$$('.details-view')[0].classList[ops[+!on_details]]('shown');
+	if (!on_details) {
+		hashStorage.del('view');
+	}
+}
+
+async function showDetails(carid) {
+	switchViews(true);
+	hashStorage.set('view', carid);
+	
+	var car = await $$.fjson('/cars/api/cars/details?id=' + carid);
+	
+	console.log('v', car);
+	
+	$$('.item-name').text(brandmap[car.brand_id].name + ' ' + car.model);
+	$$('.item-price').text(car.price_eur_cent / 100 + ' €');
+	
+	var imgc = $$('.item-imgs')[0];
+	imgc.innerHTML = "";
+	
+	for (var img of car.imgs) {
+		imgc.appendChild(mkHTML('img', {
+			src: img.path
+		}));
+	}
+	
+	if (car.imgs.length == 0) {
+		imgc.appendChild(mkHTML('img', {
+			src: '/modules/page_cars/view/img/placeholder.png'
+		}));
+	}
+	
+	new Glider(imgc, {
+		slidesToShow: 1,
+		slidesToScroll: 1,
+		draggable: true
+	});
+	
+	var descc = $$('.item-desc')[0];
+	descc.innerHTML = "";
+	var desckeys = [
+		'color', 'created', 'description', 'kms', 'lat', 'lon',
+		'model', 'num_plate', 'reg_date', 'wheel_power', 'views'
+	];
+	
+	for (var i of desckeys) {
+		var readableKey = i.replace(/_/g, ' ')
+				.replace(/^./, i[0].toUpperCase());
+				
+		descc.appendChild(mkHTML('div', {
+			innerText: readableKey + ': ' + car[i]
+		}))
+	}
+	
+	await populateRelatedBooks(car);
+}
+
 function populateShop(page = 1) {
 	currpage = page;
 	shoplist.innerHTML = "";
@@ -13,7 +114,7 @@ function populateShop(page = 1) {
 	currmarkers = [];
 	populateFooter();
 	
-	$$.fjson('/cars/api/cars?page=' + page)
+	return $$.fjson('/cars/api/cars?page=' + page)
 	.then(cars => {
 		console.log(cars);
 		var i = (page - 1) * 10;
@@ -29,16 +130,13 @@ function populateShop(page = 1) {
 			var el = mkHTML('div', {
 				className: 'l-item',
 				onclick: (carid => e => {
-					console.log(carid);
+					showDetails(carid);
 				})(car.car_id)
 			});
 			
 			el.appendChild(mkHTML('div', {
 				className: 'c-img',
-				style: 'background-image: url("' + img +'");',
-				onclick: (carid => e => {
-					console.log(carid);
-				})(car.car_id)
+				style: 'background-image: url("' + img +'");'
 			}));
 			
 			var info = mkHTML('div');
@@ -130,13 +228,54 @@ function initMap() {
 	});
 }
 
+async function initFilters() {
+	var totalbr = await $$.fjson('/cars/api/brands/total');
+	var brands = await $$.fjson('/cars/api/brands?limit=' + totalbr);
+	brandmap = {};
+	
+	console.log(totalbr, brands);
+
+	var sel = $$('select[name="brand"]')[0];
+	
+	sel.appendChild(mkHTML('option', {
+		innerText: 'Any brand'
+	}));
+	
+	for (var br of brands) {
+		sel.appendChild(mkHTML('option', {
+			value: br.brand_id+'',
+			innerText: br.name
+		}));
+		
+		brandmap[br.brand_id] = br;
+	}
+	
+	var radios = $$('input[type="radio"]');
+	radios.on('change', (e, elm) => {
+		for (var r of radios) { r.onclick = null; }
+		
+		elm.onclick = function() {
+	        this.checked = false;
+	        this.onclick = null;
+	    };
+	});
+}
+
 async function initShop() {
-	shopfooter = $('.shop-view > .view-footer')[0];
+	shopfooter = $$('.shop-view > .view-footer')[0];
 	shoplist = $$('.shop-view > .listing')[0];
-	await populateFooter();
+	$$('.det-head > a').click(() => switchViews(false));
+	gkey = $$('meta[name="jjp-google-api"]')[0].content;
 }
 
 ready(async () => {
 	await initShop();
-	populateShop();
-})
+	await initFilters();
+	
+	var cid = hashStorage.get('view');
+	if (cid) {
+		await showDetails(cid);
+	}
+	
+	await populateShop();
+});
