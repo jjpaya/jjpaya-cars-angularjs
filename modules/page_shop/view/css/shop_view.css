@@ -2,6 +2,10 @@
 	height: 200px;
 }
 
+.listing, .filters {
+	text-align: center;
+}
+
 .filters b {
 	display: block;
 }
@@ -23,6 +27,7 @@
 }*/
 
 .l-item {
+	text-align: initial;
 	width: 100%;
 	background-position: center;
 	background-size: cover;

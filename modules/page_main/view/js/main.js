@@ -6,7 +6,7 @@ var scrollerPage = 1;
 var scrollerEnd = false;
 
 function populateCarousel() {
-	$$.fjson('/cars/api/cars')
+	$$.fjson('/cars/api/cars?order=2')
 	.then(cars => {
 		console.log(cars);
 		for (var car of cars) {
@@ -69,7 +69,7 @@ function loadMoreBrandsScroller() {
 				onclick: (brandid => e => {
 					console.log(brandid);
 					window.location.href = "/shop#" + JSON.stringify({
-						filters: {brand: brandid}
+						filters: {brand_id: brandid}
 					});
 				})(brand.brand_id)
 			});
@@ -85,7 +85,7 @@ function loadMoreBrandsScroller() {
 function initBrandsScroller() {
 	scroller = $$('#brand-scroller')[0];
 	window.onscroll = ev => {
-	    if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight) {
+	    if ((window.innerHeight + window.pageYOffset + 5) >= document.body.offsetHeight) {
 	        loadMoreBrandsScroller();
 	    }
 	};

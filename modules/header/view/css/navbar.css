@@ -43,8 +43,33 @@
 }
 
 
-.header .lang {
+.header .search {
 	margin-left: auto;
+}
+
+#h-autocomplete.hidden {
+	display: none;
+}
+
+
+.acompl {
+	cursor: pointer;
+}
+
+.acompl:hover {
+	background-color: #EEF;
+}
+
+.header #h-autocomplete {
+    position: absolute;
+    background-color: white;
+    border: 1px solid;
+    padding: 3px;
+    z-index: 1;
+}
+
+.header .lang {
+	margin-left: 15px;
 }
 
 .header .lang a {

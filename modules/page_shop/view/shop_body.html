@@ -3,22 +3,26 @@
 		<div class="card gmaps"></div>
 		<div class="filters">
 			<div class="card">
-				<b>Number Plate</b>
-				<input type="text" name="num-plate" maxlength="7" placeholder="Number Plate"/>
+				<b>Sort by...</b>
+				<select name="order">
+					<option value="1">ID</option>
+					<option value="2">Views</option>
+					<option value="3">Price</option>
+				</select>
 				<hr>
 				<b>Max KMs</b>
-				<input type="number" name="max-kms" min="0" max="999999" step="10000" placeholder="Max KMs"/>
+				<input type="number" name="max_kms" min="0" max="999999" step="10000" placeholder="Max KMs"/>
 				<hr>
 				<b>Brand</b>
-				<select name="brand"></select>
+				<select name="brand_id"></select>
 				<hr>
 				<b>Wheel drive</b>
-				<label><input type="radio" name="drive" value="front"> Front</label>
-				<label><input type="radio" name="drive" value="rear"> Rear</label>
-				<label><input type="radio" name="drive" value="all"> 4x4</label>
+				<label><input type="radio" name="wheel_drive" value="front"> Front</label>
+				<label><input type="radio" name="wheel_drive" value="rear"> Rear</label>
+				<label><input type="radio" name="wheel_drive" value="all"> 4x4</label>
 				<hr>
 				<b>Max Price</b>
-				<input type="number" name="max-price" placeholder="Max Price"/>
+				<input type="number" name="max_price" placeholder="Max Price"/>
 			</div>
 		</div>
 		<div class="card listing"></div>

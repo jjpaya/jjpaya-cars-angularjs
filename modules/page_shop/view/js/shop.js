@@ -107,6 +107,21 @@ async function showDetails(carid) {
 	await populateRelatedBooks(car);
 }
 
+function getFilterQuery() {
+	var fil = hashStorage.get('filters') || {};
+	var params = Object.keys(fil).map(k => `${k}=${encodeURIComponent(fil[k])}`).join('&');
+	if (params.length > 0) {
+		params = '&' + params;
+	}
+	
+	return params;
+}
+
+function refreshShop() {
+	populateShop(currpage);
+	updateFilters();
+}
+
 function populateShop(page = 1) {
 	currpage = page;
 	shoplist.innerHTML = "";
@@ -114,16 +129,23 @@ function populateShop(page = 1) {
 	currmarkers = [];
 	populateFooter();
 	
-	return $$.fjson('/cars/api/cars?page=' + page)
+	return $$.fjson('/cars/api/cars?page=' + page + getFilterQuery())
 	.then(cars => {
 		console.log(cars);
 		var i = (page - 1) * 10;
+		
+		if (cars.length == 0) {
+			shoplist.appendChild(mkHTML('div', {
+				innerText: 'No results.'
+			}));
+		}
+		
 		for (var car of cars) {
 			i++;
 			var img = (car.imgs[0] || {}).path || '/modules/page_cars/view/img/placeholder.png';
 			var pos = null;
 			
-			if (car.lat && car.lon) {
+			if (car.lat && car.lon && shopmap) {
 				pos = new google.maps.LatLng(car.lat, car.lon);
 			}
 			
@@ -146,13 +168,13 @@ function populateShop(page = 1) {
 			info.appendChild(mkHTML('hr'));
 			
 			info.appendChild(mkHTML('span', {
-				innerText: car.description
+				innerText: car.description + ', ' + car.views + ' view(s)'
 			}));
 			
 			el.appendChild(info);
 			shoplist.appendChild(el);
 			
-			if (pos) {
+			if (pos && shopmap) {
 				var marker = new google.maps.Marker({
 				    position: pos,
 				    title: car.brand_name + ' ' + car.model,
@@ -180,8 +202,9 @@ function populateShop(page = 1) {
 
 async function populateFooter() {
 	shopfooter.innerHTML = "";
-	var total = await $$.fjson('/cars/api/cars/total');
-	var pages = Math.ceil(total / 10);
+
+	var total = await $$.fjson('/cars/api/cars/total' + getFilterQuery().replace('&', '?'));
+	var pages = Math.max(1, Math.ceil(total / 10));
 	console.log(total, pages);
 
 	if (currpage != 1) {
@@ -228,6 +251,37 @@ function initMap() {
 	});
 }
 
+function radioFilterUnchecked() {
+    this.checked = false;
+    this.onclick = null;
+    
+    var fil = hashStorage.get('filters') || {};
+    delete fil[this.name];
+    
+    hashStorage.set('filters', fil);
+    
+    populateShop(1);
+}
+
+function updateFilters() {
+	var fil = hashStorage.get('filters') || {};
+	
+	Object.keys(fil).forEach(k => {
+		var el = $$('.filters *[name="' + k + '"]');
+
+		el.forEach(e => {
+			if (e.type == 'radio') {
+				e.checked = fil[k] === e.value;
+				if (e.checked) {
+					e.onclick = radioFilterUnchecked;
+				}
+			} else {
+				e.value = fil[k];
+			}
+		});
+	});
+}
+
 async function initFilters() {
 	var totalbr = await $$.fjson('/cars/api/brands/total');
 	var brands = await $$.fjson('/cars/api/brands?limit=' + totalbr);
@@ -235,10 +289,12 @@ async function initFilters() {
 	
 	console.log(totalbr, brands);
 
-	var sel = $$('select[name="brand"]')[0];
+	var sel = $$('select[name="brand_id"]')[0];
+	sel.innerHTML = "";
 	
 	sel.appendChild(mkHTML('option', {
-		innerText: 'Any brand'
+		innerText: 'Any brand',
+		value: '-1'
 	}));
 	
 	for (var br of brands) {
@@ -254,10 +310,33 @@ async function initFilters() {
 	radios.on('change', (e, elm) => {
 		for (var r of radios) { r.onclick = null; }
 		
-		elm.onclick = function() {
-	        this.checked = false;
-	        this.onclick = null;
-	    };
+		var fil = hashStorage.get('filters') || {};
+        fil[elm.name] = elm.value;
+        
+        hashStorage.set('filters', fil);
+		
+		elm.onclick = radioFilterUnchecked;
+	    
+	    populateShop(1);
+	});
+	
+	updateFilters();
+	
+	$$('.filters input, .filters select').on('change', (e, elm) => {
+		if (elm.type == 'radio') {
+			return;
+		}
+		
+		var fil = hashStorage.get('filters') || {};
+		if (elm.value.length == 0 || elm.value == '-1') {
+			delete fil[elm.name];
+		} else {
+			fil[elm.name] = elm.value;
+		}
+		
+		hashStorage.set('filters', fil);
+		
+		populateShop(1);
 	});
 }
 

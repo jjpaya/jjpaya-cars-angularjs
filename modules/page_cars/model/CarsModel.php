@@ -102,35 +102,75 @@ EOQ
 		
 		public function find_cars(string $containing, int $limit = 10) : mysqli_result {
 			return $this->db->pquery(<<<'EOQ'
-				SELECT c.*, br.name AS brand_name
+				SELECT DISTINCT CONCAT(br.name, ' ', model) AS name
 				FROM cars AS c
 				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
-				WHERE CONCAT(br.name, model) LIKE CONCAT('%', ?, '%')
+				WHERE CONCAT(br.name, ' ', model) LIKE CONCAT('%', ?, '%')
 				ORDER BY br.name DESC, model DESC, car_id DESC
 				LIMIT ?
 EOQ
 			, $containing, $limit);
 		}
 	
-		
-		public function get_cars_paged(int $page, int $limit = 10) : mysqli_result {
-			return $this->db->pquery(<<<'EOQ'
-				SELECT c.*, br.name AS brand_name
+		private function make_filtered_cars_sql(?string $containing, ?int $max_kms,
+				?int $brand_id, ?string $wheel_drive, ?int $max_price, bool $paged = true) : string {
+			$sql = <<<'EOQ'
 				FROM cars AS c
 				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
-				ORDER BY car_id DESC
-				LIMIT ?
-				OFFSET ?
-EOQ
-			, $limit, ($page - 1) * $limit);
+				WHERE 1=1
+EOQ;
+			if (!is_null($containing)) {
+				$sql .= ' AND CONCAT(br.name, \' \', model) LIKE CONCAT(\'%\', ?, \'%\')';
+			}
+			
+			if (!is_null($max_kms))     { $sql .= ' AND kms <= ?'; }
+			if (!is_null($brand_id))    { $sql .= ' AND c.brand_id = ?'; }
+			if (!is_null($wheel_drive)) { $sql .= ' AND wheel_power = ?'; }
+			if (!is_null($max_price))   { $sql .= ' AND price_eur_cent <= ?'; }
+			
+			$sql .= <<<'EOQ'
+				ORDER BY 
+					CASE ?
+						WHEN 1 THEN car_id
+    					WHEN 2 THEN views
+    					WHEN 3 THEN price_eur_cent
+    				END DESC
+EOQ;
+			
+			if ($paged) { $sql .= ' LIMIT ? OFFSET ?'; }
+			
+			return $sql;
 		}
 		
-		public function get_total_cars() : int {
-			return intval($this->db->pquery(<<<'EOQ'
-				SELECT COUNT(*)
-				FROM cars
-EOQ
-			)->fetch_array()[0]);
+		public function get_cars_paged(int $page, int $limit = 10, int $ordering = 1,
+				?string $containing = null, ?int $max_kms = null, ?int $brand_id = null,
+				?string $wheel_drive = null, ?int $max_price = null) : mysqli_result {
+					
+			$params = array_values(array_filter(array(
+				$containing, $max_kms, $brand_id, $wheel_drive, $max_price,
+				$ordering, $limit, ($page - 1) * $limit
+			), function($el) {
+				return !is_null($el);
+			}));
+			
+			return $this->db->pquery('SELECT c.*, br.name AS brand_name'
+				. $this->make_filtered_cars_sql($containing, $max_kms, $brand_id, $wheel_drive, $max_price)
+			, ...$params);
+		}
+		
+		public function get_total_cars(
+				?string $containing = null, ?int $max_kms = null, ?int $brand_id = null,
+				?string $wheel_drive = null, ?int $max_price = null) : int {
+			
+			$params = array_values(array_filter(array(
+				$containing, $max_kms, $brand_id, $wheel_drive, $max_price, 1
+			), function($el) {
+				return !is_null($el);
+			}));
+			
+			return $this->db->pquery('SELECT COUNT(*)'
+				. $this->make_filtered_cars_sql($containing, $max_kms, $brand_id, $wheel_drive, $max_price, false)
+			, ...$params)->fetch_array()[0];
 		}
 		
 		

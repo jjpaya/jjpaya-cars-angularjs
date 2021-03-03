@@ -1,3 +1,11 @@
 .book-title {
 	font-size: 8pt;
 }
+
+.related {
+	display: flex;
+}
+
+.related .book {
+	margin-right: 10px;
+}
