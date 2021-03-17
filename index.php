@@ -10,12 +10,20 @@
 
 	$r = new MvcRouter;
 	$r->set_page_brand('JJPaya Cars');
-	$r->set_page_mvc_content(array(
-		mvc_load_mod('common'),
-		mvc_load_mod('header'),
-		mvc_load_mod_from_url_path_or_exception('page_main', 'err404', 'err503'),
-		mvc_load_mod('footer')
-	));
+	
+	if ((get_split_uri()[0] ?? '/') === 'api') {
+		$r->set_page_mvc_content(array(
+			mvc_load_mod_from_url_path_or_exception('err404', 'err404', 'err503', true)
+		));
+		
+	} else {
+		$r->set_page_mvc_content(array(
+			mvc_load_mod('common'),
+			mvc_load_mod('header'),
+			mvc_load_mod_from_url_path_or_exception('page_main', 'err404', 'err503'),
+			mvc_load_mod('footer')
+		));
+	}
 
 	$r->handle_request();
 ?>
