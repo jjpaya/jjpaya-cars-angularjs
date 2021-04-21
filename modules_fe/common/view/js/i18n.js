@@ -4,7 +4,7 @@ var langs = {};
 
 async function loadLang(key) {
 	return langs[key]
-		|| (langs[key] = await $$.fjson(`/modules_fe/common/view/i18n/${key}.json`));
+		|| (langs[key] = await $$.fjson(`/common/i18n/${key}.json`));
 }
 
 function applyLang(data) {
@@ -47,7 +47,7 @@ function bindLangSwitchers() {
 
 async function loadLangs() {
 	const selected = pickLangs([getStoredLangOrDefault(), ...(navigator.languages || []), 'en']);
-	const data = await $$.fjson('/modules_fe/common/view/i18n/available.json');
+	const data = await $$.fjson('/common/i18n/available.json');
 	
 	for (const ln of selected) {
 		if (data.indexOf(ln) !== -1) {

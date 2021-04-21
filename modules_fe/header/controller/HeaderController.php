@@ -5,7 +5,7 @@
 	class HeaderController extends Controller {
 		
 		public function handle_get_head() : void {
-			require __DIR__ . '/../view/navbar_head.phtml';
+			require __DIR__ . '/../view/navbar_head.html';
 		}
 		
 		public function handle_get_body() : bool {

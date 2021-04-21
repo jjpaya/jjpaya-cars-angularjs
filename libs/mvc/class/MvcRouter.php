@@ -1,11 +1,9 @@
 <?php
-	class MvcRouter {
-		private $page_charset = 'UTF-8';
-		private $page_brand = null;
-		private $page_mvc_modules = array();
-		private $done = false;
-		
-		
+	class MvcRouter extends MvcModuleLoader {
+		private string $page_charset = 'UTF-8';
+		private string $page_brand = null;
+		private array $page_mvc_modules = array();
+		private bool $done = false;
 		
 		public function set_page_charset(string $cset) : void {
 			$this->page_charset = $cset;

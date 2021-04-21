@@ -78,7 +78,7 @@ async function showDetails(carid) {
 	
 	if (car.imgs.length == 0) {
 		imgc.appendChild(mkHTML('img', {
-			src: '/modules_fe/page_cars/view/img/placeholder.png'
+			src: '/page_cars/img/placeholder.png'
 		}));
 	}
 	
@@ -142,7 +142,7 @@ function populateShop(page = 1) {
 		
 		for (var car of cars) {
 			i++;
-			var img = (car.imgs[0] || {}).path || '/modules_fe/page_cars/view/img/placeholder.png';
+			var img = (car.imgs[0] || {}).path || '/page_cars/img/placeholder.png';
 			var pos = null;
 			
 			if (car.lat && car.lon && shopmap) {

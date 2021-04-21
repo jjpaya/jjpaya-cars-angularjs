@@ -1,0 +1,57 @@
+<div class="head-auth">
+	<a href="javascript:void(0)" data-target-popup="login" class="priv-guest">Login</a>
+	<a href="javascript:void(0)" data-target-popup="register" class="priv-guest">Register</a>
+	<a href="javascript:void(0)" data-target-popup="logoff" class="priv-logged">Log off</a>
+	<a href="javascript:void(0)" data-target-popup="profile" class="priv-logged">
+		<img src="/header/img/user-ph.png" alt="Profile">
+	</a>
+
+	<div class="ha-popup login-popup">
+		<div>
+			<form action="/api/auth/login/local" method="post" id="login">
+				<span class="fieldtitle">Login name:</span>
+				<input type="text" id="loginname" name="loginname" maxlength="30" autocomplete="username" required=""><br>
+				<span class="fieldtitle">Password: <a href="/resetpass">(forgot?)</a></span>
+				<input type="password" name="pass" maxlength="256" autocomplete="current-password" required=""><br>
+
+				<label><input type="checkbox" name="persistent"><span class="fieldtitle">Remember me</span></label><br>
+
+				<input type="submit" value="Login">
+				<span id="bad_login" class="err hide"><b>Bad username or password!</b><br></span>
+				<span id="bad_sess" class="err hide"><b>Your session expired, or wasn't valid. You'll need to log in again.</b><br></span>
+				<span id="bad_name" class="err hide"><b>Login names can't have those characters!</b><br></span>
+			</form>
+		</div>
+	</div>
+	<div class="ha-popup register-popup">
+		<div>
+			<form action="/api/register/uvias" method="post" id="register">
+				<span class="fieldtitle">User name:</span>
+				<input id="reg_dn" type="text" name="displayname" maxlength="30" autocomplete="nickname" required="">
+				<span id="reg_dn_st"></span><br>
+
+				<span class="fieldtitle">Mail address:</span>
+				<input type="email" name="email" maxlength="256" autocomplete="email" required=""><br>
+
+				<span class="fieldtitle">Password:</span>
+				<input id="reg_pw" type="password" name="pass" maxlength="256" autocomplete="new-password" required=""><br>
+
+				<span class="fieldtitle">Confirm password:</span>
+				<input id="reg_cpw" type="password" name="pass_confirm" maxlength="256" autocomplete="new-password" required="">
+				<span id="reg_pw_st" style="display: none;"> <b>Passwords do not match.</b></span><br>
+
+				<input id="reg_sub" type="submit" value="Register">
+				<span id="bad_reg_uvias" class="err" style="display: none;"><b>Display, login name or mail already in use!</b><br></span>
+			</form>
+		</div>
+	</div>
+	<div class="ha-popup logoff-popup">
+		<div>
+			<form method="post" action="/api/auth/logoff">
+				<div>Are you sure you want to log off?</div>
+				<input type="submit" value="Log off" />
+			</form>
+		</div>
+	</div>
+	<a href="javascript:void(0)" class="ha-popup-dismisser"></a>
+</div>

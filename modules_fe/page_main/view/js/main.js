@@ -10,7 +10,7 @@ function populateCarousel() {
 	.then(cars => {
 		console.log(cars);
 		for (var car of cars) {
-			var img = (car.imgs[0] || {}).path || '/modules_fe/page_cars/view/img/placeholder.png';
+			var img = (car.imgs[0] || {}).path || '/page_cars/img/placeholder.png';
 			
 			var el = mkHTML('div', {
 				className: 'c-car',

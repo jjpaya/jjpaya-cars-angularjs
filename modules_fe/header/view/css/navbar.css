@@ -103,7 +103,7 @@ a.ha-popup-dismisser {
 	z-index: 2;
 }
 
-.ha-popup:target ~ .ha-popup-dismisser {
+.ha-popup.show ~ .ha-popup-dismisser {
 	display: block;
 }
 
@@ -116,6 +116,7 @@ div.ha-popup {
 	top: 0;
 	padding-top: 11vh;
 	max-width: 20vw;
+	min-width: 200px;
 }
 
 div.ha-popup > div {
@@ -127,6 +128,6 @@ div.ha-popup > div {
 	padding: 10px;
 }
 
-div.ha-popup:target {
+div.ha-popup.show {
 	display: block;
 }

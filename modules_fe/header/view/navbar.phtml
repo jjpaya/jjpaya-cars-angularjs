@@ -1,57 +1,25 @@
 <div class="header">
-	<img src="/modules_fe/header/view/img/logo.png" title="JJPaya Forums">
+	<img src="/header/img/logo.png" title="JJPaya Forums">
 	<span class="nav">
 		<a data-tr="p-main"    href="/main"    class="<?= $current_p('main', true); ?>"></a>
 		<a data-tr="p-cars"    href="/cars"    class="<?= $current_p('cars'); ?>"></a>
 		<a data-tr="p-shop"    href="/shop"    class="<?= $current_p('shop'); ?>"></a>
 		<a data-tr="p-contact" href="/contact" class="<?= $current_p('contact'); ?>"></a>
 	</span>
+	
 	<span class="lang">
 		<a data-tr-switch="es" href="javascript:void(0)" title="ES">
-			<img src="/modules_fe/header/view/img/es.png" alt="ES">
+			<img src="/header/img/es.png" alt="ES">
 		</a>
 		<a data-tr-switch="en" href="javascript:void(0)" title="EN">
-			<img src="/modules_fe/header/view/img/en.png" alt="EN">
+			<img src="/header/img/en.png" alt="EN">
 		</a>
 	</span>
+	
 	<div class="search">
 		<input type="text" id="h-search" placeholder="Search cars...">
 		<div id="h-autocomplete" class="hidden"></div>
 	</div>
 	
-	<div class="head-auth">
-		<a href="#login-popup" class="priv-guest head-login">Login</a>
-		<a href="#register-popup" class="priv-guest head-register">Register</a>
-		<a href="#logoff-popup" class="priv-logged head-logoff">Logoff</a>
-		<a href="javascript:void(0)" class="priv-logged head-prof">
-			<img src="/modules_fe/header/view/img/user-ph.png" alt="Profile">
-		</a>
-		
-		<div id="login-popup" class="ha-popup">
-			<div>
-				<form method="post" action="/api/auth/logoff">
-					<div>Are you sure you want to logoff?</div>
-					<input type="submit" value="Logoff"/>
-				</form>
-			</div>			
-		</div>
-		<div id="register-popup" class="ha-popup">
-			<div>
-				<form method="post" action="/api/auth/logoff">
-					<div>Are you sure you want to logoff?</div>
-					<input type="submit" value="Logoff"/>
-				</form>
-			</div>		
-		</div>
-		<div id="logoff-popup" class="ha-popup">
-			<div>
-				<form method="post" action="/api/auth/logoff">
-					<div>Are you sure you want to logoff?</div>
-					<input type="submit" value="Logoff"/>
-				</form>
-			</div>
-		</div>
-		<a href="#" class="ha-popup-dismisser"></a>
-	</div>
-
+	<?= require 'navbar_auth.html' ?>
 </div>

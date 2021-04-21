@@ -9,6 +9,20 @@
 	Config::load_config('private/credentials.json');
 
 	$r = new MvcRouter;
+	
+	/*// with autoload, no need to remove already written requires
+	$l = new MvcModuleLoader; // maybe integrate to mvcrouter
+	$l->add_middleware(new MwSessionLoader());
+	$l->add_middleware(new MwControllerAuthenticator());
+	// check all modules to load before starting to instance them
+	$r->set_module_loader($l);
+	$r->set_request_modules([
+		'common',
+		'header',
+		mvc_get_module_name_from_url_path_or_exception(...),
+		'footer'
+	]);*/
+	
 	$r->set_page_brand('JJPaya Cars');
 	
 	if ((get_split_uri()[0] ?? '/') === 'api') {
