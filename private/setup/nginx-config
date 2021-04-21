@@ -2,7 +2,6 @@ server {
 	listen 8080 default_server;
 	listen [::]:8080 default_server;
 
-	# Add index.php to the list if you are using PHP
 	index index.php;
 
 	server_name _;
@@ -18,9 +17,20 @@ server {
 
 	location / {
 		root /var/www/html;
-		# First attempt to serve request as file, then
-		# as directory, then fall back to displaying a 404.
 		try_files $uri $uri/ /index.php?$query_string;
+
+		location = /favicon.ico {
+			try_files /favicon.ico =404;
+		}
+
+		location ^~ /data/ {
+			try_files $uri $uri/ =404;
+		}
+
+		location ~ \.(css|jpe?g|png|gif|js|json|ico)$ {
+			rewrite ^/([^/]+)/([^/]+)/(.+)$ /modules_fe/$1/view/$2/$3 break;
+			return 403;
+		}
 
 		location ~ \.php$ {
 			include snippets/fastcgi-php.conf;
