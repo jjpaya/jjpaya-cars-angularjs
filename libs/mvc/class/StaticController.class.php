@@ -1,6 +1,4 @@
 <?php
-	require_once 'Controller.php';
-
 	abstract class StaticController extends Controller {
 		protected ReflectionClass $rc;
 		protected string $name;

@@ -1,6 +1,4 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-	
 	class Err404Controller extends StaticController {
 		
 		public function get_title() : string {

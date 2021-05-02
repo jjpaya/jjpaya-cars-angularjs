@@ -1,6 +1,4 @@
 <?php
-	require_once 'Controller.php';
-
 	abstract class ApiRestController extends Controller {
 		public function handle_get() : bool { return false; }
 		public function handle_post() : bool { return false; }

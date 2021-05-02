@@ -1,8 +1,9 @@
 <?php
 	class MvcRouter extends MvcModuleLoader {
+		private ?string $exception_controller = 'Err503Controller';
 		private string $page_charset = 'UTF-8';
-		private string $page_brand = null;
-		private array $page_mvc_modules = array();
+		private ?string $page_brand = null;
+		private ?array $page_mvc_modules = null;
 		private bool $done = false;
 		
 		public function set_page_charset(string $cset) : void {
@@ -11,10 +12,6 @@
 		
 		public function set_page_brand(string $name) : void {
 			$this->page_brand = $name;
-		}
-		
-		public function set_page_mvc_content(array $content) : void {
-			$this->page_mvc_modules = $content;
 		}
 		
 		public function request_done() : bool {
@@ -47,6 +44,24 @@
 		}
 		
 		public function handle_request() : void {
+			try {
+				$this->exec_middlewares();
+				$this->page_mvc_modules = parent::instance_modules();
+				
+			} catch (Exception $e) {
+				if (is_null($exception_controller) || !class_exists($exception_controller)) {
+					throw $e;
+				}
+			
+				$instance = new $exception_controller;
+			
+				if (method_exists($instance, 'set_error_context')) {
+					$instance->set_error_context($e);
+				}
+				
+				$this->page_mvc_modules = [$instance];
+			}
+			
 			$this->send_http_head();
 			
 			if ($this->request_done()) {

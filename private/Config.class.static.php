@@ -1,5 +1,5 @@
 <?php
-	require_once 'libs/utils/misc.php';
+	require_once 'libs/utils/misc.inc.php';
 	require_once 'libs/db/inc.php';
 	
 	class Config {

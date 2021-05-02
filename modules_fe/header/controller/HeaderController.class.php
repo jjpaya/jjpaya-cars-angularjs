@@ -1,6 +1,5 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-	require_once 'libs/utils/url.php';
+	require_once 'libs/utils/url.inc.php';
 	
 	class HeaderController extends Controller {
 		

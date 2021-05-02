@@ -1,10 +1,8 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-
 	abstract class ApiDbEndpoint extends ApiRestController {
-		protected CarsModel $mdl;
+		protected PageCarsModel $mdl;
 		
-		public function __construct(CarsModel $mdl) {
+		public function __construct(PageCarsModel $mdl) {
 			$this->mdl = $mdl;
 		}
 	}

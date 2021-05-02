@@ -1,14 +1,12 @@
 <?php
-	require_once 'libs/utils/url.php';
-	require_once 'libs/utils/html.php';
-	require_once 'libs/utils/misc.php';
-	require_once 'libs/mvc/inc.php';
-	require_once __DIR__ . '/../model/CarsModel.php';
-	
+	require_once 'libs/utils/url.inc.php';
+	require_once 'libs/utils/html.inc.php';
+	require_once 'libs/utils/misc.inc.php';
+
 	class CrudCarsController extends Controller {
-		private CarsModel $model;
+		private PageCarsModel $model;
 		
-		public function __construct(CarsModel $model) {
+		public function __construct(PageCarsModel $model) {
 			$this->model = $model;
 			//$this->prepare();
 		}

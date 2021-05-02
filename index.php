@@ -1,43 +1,30 @@
 <?php
-	require_once 'libs/utils/includes.php';
+	require_once 'libs/utils/includes.inc.php';
 	assert_add_to_include_path($_SERVER['DOCUMENT_ROOT']);
 	
-	require_once 'private/Config.php';
-	require_once 'libs/db/inc.php';
-	require_once 'libs/mvc/inc.php';
+	require_once 'private/Config.class.static.php';
+	require_once 'libs/mvc/utils.inc.php';
 
+	mvc_setup_autoloader();
 	Config::load_config('private/credentials.json');
 
 	$r = new MvcRouter;
-	
-	/*// with autoload, no need to remove already written requires
-	$l = new MvcModuleLoader; // maybe integrate to mvcrouter
-	$l->add_middleware(new MwSessionLoader());
-	$l->add_middleware(new MwControllerAuthenticator());
-	// check all modules to load before starting to instance them
-	$r->set_module_loader($l);
-	$r->set_request_modules([
-		'common',
-		'header',
-		mvc_get_module_name_from_url_path_or_exception(...),
-		'footer'
-	]);*/
+	$r->add_middleware(MwSessionLoader::class);
+	$r->add_middleware(MwControllerAuthenticator::class);
 	
 	$r->set_page_brand('JJPaya Cars');
 	
-	if ((get_split_uri()[0] ?? '/') === 'api') {
-		$r->set_page_mvc_content(array(
-			mvc_load_mod_from_url_path_or_exception('err404', 'err404', 'err503', true)
-		));
-		
-	} else {
-		$r->set_page_mvc_content(array(
-			mvc_load_mod('common'),
-			mvc_load_mod('header'),
-			mvc_load_mod_from_url_path_or_exception('page_main', 'err404', 'err503'),
-			mvc_load_mod('footer')
-		));
-	}
-
+	// check all controllers to load before instancing them
+	$r->set_page_controllers(
+		$r->is_api_request()
+		? [UrlPathControllerSelector::class]
+		: [
+			CommonController::class,
+			HeaderController::class,
+			UrlPathControllerSelector::class,
+			FooterController::class
+		  ]
+	);
+	
 	$r->handle_request();
 ?>

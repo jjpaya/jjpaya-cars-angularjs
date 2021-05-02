@@ -1,8 +1,6 @@
 <?php
-	require_once 'libs/utils/url.php';
-	
-	require_once 'Controller.php';
-	
+	require_once 'libs/utils/url.inc.php';
+
 	abstract class MultiController extends Controller {
 		private array $routes = array();
 		private int $depth;

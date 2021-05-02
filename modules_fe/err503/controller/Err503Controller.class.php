@@ -1,6 +1,4 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-	
 	class Err503Controller extends Controller {
 		private ?Exception $context = null;
 		

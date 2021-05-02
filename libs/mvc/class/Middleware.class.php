@@ -2,10 +2,10 @@
 	abstract class Middleware {
 		protected MvcModuleLoader $loader;
 		
-		public __construct(MvcModuleLoader $loader) {
+		public function __construct(MvcModuleLoader $loader) {
 			$this->loader = $loader;
 		}
 		
-		abstract public execute() : bool;
+		abstract public function exec() : bool;
 	}
 ?>

@@ -7,7 +7,7 @@
 		private static string $pass = '';
 		private static string $db = '';
 
-		public function __construct() {
+		private function __construct() {
 			parent::__construct(
 				Database::$host,
 				Database::$user,

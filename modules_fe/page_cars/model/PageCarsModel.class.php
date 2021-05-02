@@ -1,7 +1,5 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-
-	class CarsModel extends Model {
+	class PageCarsModel extends Model {
 		
 		public function __construct() {
 			parent::__construct();
