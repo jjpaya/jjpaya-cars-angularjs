@@ -49,11 +49,11 @@
 				$this->page_mvc_modules = parent::instance_modules();
 				
 			} catch (Exception $e) {
-				if (is_null($exception_controller) || !class_exists($exception_controller)) {
+				if (is_null($this->exception_controller) || !class_exists($this->exception_controller)) {
 					throw $e;
 				}
 			
-				$instance = new $exception_controller;
+				$instance = new $this->exception_controller;
 			
 				if (method_exists($instance, 'set_error_context')) {
 					$instance->set_error_context($e);

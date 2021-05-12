@@ -1,6 +1,4 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-	
 	class Err404Controller extends ApiRestController {
 		public function send_special() : bool {
 			http_response_code(404);

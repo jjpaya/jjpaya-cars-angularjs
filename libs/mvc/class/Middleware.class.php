@@ -6,6 +6,6 @@
 			$this->loader = $loader;
 		}
 		
-		abstract public function exec() : bool;
+		abstract public function exec() : void;
 	}
 ?>

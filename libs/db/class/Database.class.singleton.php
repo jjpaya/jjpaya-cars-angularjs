@@ -18,6 +18,11 @@
 			mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
 		}
 		
+		/* simple query */
+		public function squery($query) : mysqli_result|bool {
+			return parent::query($query);
+		}
+		
 		public function pquery($query, ...$args) : mysqli_result|bool {
 			$params = [];
 			$result = null;

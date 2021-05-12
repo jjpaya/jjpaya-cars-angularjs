@@ -14,6 +14,10 @@
 	
 	$r->set_page_brand('JJPaya Cars');
 	
+	if ($r->is_api_request()) {
+		UrlPathControllerSelector::set_controller_class_prefix('Api');
+	}
+	
 	// check all controllers to load before instancing them
 	$r->set_page_controllers(
 		$r->is_api_request()

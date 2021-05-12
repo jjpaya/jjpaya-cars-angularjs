@@ -5,8 +5,10 @@
 		assert_add_to_include_path(__DIR__ . '/class');
 		
 		assert_add_to_include_path($_SERVER['DOCUMENT_ROOT'] . '/libs/db/class');
+		assert_add_to_include_path($_SERVER['DOCUMENT_ROOT'] . '/libs/jwt/class');
 		assert_add_to_include_path($_SERVER['DOCUMENT_ROOT'] . '/middlewares');
 		assert_add_to_include_path($_SERVER['DOCUMENT_ROOT'] . '/models');
+		assert_add_to_include_path($_SERVER['DOCUMENT_ROOT'] . '/models/db_types');
 		
 		spl_autoload_register(function ($class_name) {
 			foreach (['.class.php', '.class.singleton.php'] as &$ext) {

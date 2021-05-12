@@ -1,0 +1,67 @@
+<?php
+	class ApiAuthLoginController extends ApiRestController {
+		public function handle_post() : bool {
+			if (!array_key_exists('username', $_POST)
+					|| !array_key_exists('pass', $_POST)) {
+				http_response_code(400);
+				echo json_encode([
+					'ok' => false,
+					'err' => 'Incomplete data'
+				]);
+				
+				return true;
+			}
+			
+			$am = AuthModel::get_instance();
+			$usrn = $_POST['username']; // can be username or email
+			$pass = $_POST['pass'];
+			
+			$accdata = $am->get_local_account_info($usrn);
+			
+			if (!$accdata || !password_verify($pass, $accdata['password'])) {
+				http_response_code(404);
+				echo json_encode([
+					'ok' => false,
+					'err' => 'No such user or bad password'
+				]);
+				
+				return true;
+			}
+			
+			$jwt = new JWT(Config::get_jwt_secret());
+			$exptime = time() + 60 * 60 * 24 * 7;
+			
+			$sesspload = $jwt->encode([
+				'sess_uid' => $accdata['uid'],
+				'persist' => boolval($_POST['remember'] ?? false),
+				'stype' => 'local',
+				'exp' => $exptime
+			]);
+			
+			$udatapload = $jwt->encode([
+				'uid' => $accdata['uid'],
+				'username' => $accdata['username'],
+				'admin' => $accdata['is_admin'],
+				'img' => $accdata['img'],
+				'stype' => 'local',
+				'email_verified' => $accdata['email_verified'],
+				'exp' => $exptime
+			]);
+			
+			setcookie('jwtsesstoken', $sesspload, [
+				'expires' => ($_POST['remember'] ?? false) ? $exptime : 0,
+				'path' => '/api/',
+				'secure' => false,  /* TODO: change to true on https */
+				'httponly' => true,
+				'samesite' => 'Lax'
+			]);
+
+			echo json_encode([
+				'ok' => true,
+				'data' => $udatapload
+			]);
+			
+			return true;
+		}
+	}
+?>

@@ -19,6 +19,17 @@
 			return (get_split_uri()[0] ?? '/') === 'api';
 		}
 		
+		public static function get_controller_uri_path() : array {
+			$uri = get_split_uri();
+			
+			if (self::is_api_request()) {
+				// remove the /api/ from the url when handling it
+				array_shift($uri);
+			}
+			
+			return $uri;
+		}
+		
 		public function add_middleware(string $class_type) : mixed {
 			return $this->middleware_instances[] = new $class_type($this);
 		}
@@ -43,15 +54,13 @@
 			$this->page_controllers = $ctrls;
 		}
 		
+		public function get_real_page_controllers() : array {
+			$uri = self::get_controller_uri_path();
+			return array_map(fn($name) => $name::get_real_controller($uri), $this->page_controllers);
+		}
+		
 		public function instance_modules() : array {
-			$uri = get_split_uri();
-			
-			if (self::is_api_request()) {
-				// remove the /api/ from the url when handling it
-				array_shift($uri);
-			}
-			
-			return array_map(fn($name) => new ($name::get_real_controller($uri)), $this->page_controllers);
+			return array_map(fn($name) => new $name, $this->get_real_page_controllers());
 		}
 	}
 ?>
