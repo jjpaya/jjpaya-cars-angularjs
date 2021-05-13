@@ -1,14 +1,29 @@
 <?php
-	require_once 'libs/mvc/inc.php';
-
 	class CarsModel extends Model {
-		
-		public function __construct() {
+		private static ?CarsModel $instance = null;
+
+		private function __construct() {
 			parent::__construct();
 			$this->db_setup();
 		}
 		
+		public static function get_instance() : CarsModel {
+			if (is_null(self::$instance)) {
+				self::$instance = new self;
+			}
+			
+			return self::$instance;
+		}
+		
+		
 		private function db_setup() : void {
+			
+			/**********
+			 * 
+			 * TABLES
+			 * 
+			 **********/
+			 
 			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS car_brands (
 					brand_id SERIAL PRIMARY KEY,
@@ -60,7 +75,26 @@ EOQ
 				)
 EOQ
 			);
+			
+			$this->db->pquery(<<<'EOQ'
+				CREATE TABLE IF NOT EXISTS starred_cars (
+					car_id BIGINT UNSIGNED,
+					uid BIGINT NOT NULL,
+					starred_on DATETIME NOT NULL DEFAULT NOW(),
+					
+					PRIMARY KEY(car_id, uid),
+					FOREIGN KEY(car_id) REFERENCES cars (car_id) ON DELETE CASCADE,
+					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
+				)
+EOQ
+			);
 		}
+		
+		
+		
+		
+		
+		
 		
 		public function get_all_brands() : mysqli_result {
 			return $this->db->pquery(<<<'EOQ'
@@ -88,6 +122,32 @@ EOQ
 				FROM car_brands
 EOQ
 			)->fetch_array()[0]);
+		}
+		
+		public function get_all_starred_cars_of(int $uid) : mysqli_result {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT *
+				FROM starred_cars
+				WHERE uid = ?
+				ORDER BY starred_on DESC
+EOQ
+			, $uid);
+		}
+		
+		public function add_car_as_starred(int $cid, int $uid) : void {
+			$this->db->pquery(<<<'EOQ'
+				INSERT INTO starred_cars (car_id, uid)
+				VALUES (?, ?)
+EOQ
+			, $cid, $uid);
+		}
+		
+		public function del_car_from_starred(int $cid, int $uid) : void {
+			$this->db->pquery(<<<'EOQ'
+				DELETE FROM starred_cars
+				WHERE car_id = ? AND uid = ?
+EOQ
+			, $cid, $uid);
 		}
 		
 		public function get_all_cars() : mysqli_result {

@@ -2,13 +2,17 @@
 	abstract class ApiRestController extends Controller {
 		public function handle_get() : bool { return false; }
 		public function handle_post() : bool { return false; }
+		public function handle_put() : bool { return false; }
 		public function handle_delete() : bool { return false; }
 
 		public function send_special() : bool {
 			switch ($_SERVER['REQUEST_METHOD']) {
 				case 'POST':
-					return $this->handle_post();  
-
+					return $this->handle_post();
+					
+				case 'PUT':
+					return $this->handle_put();
+					
 				case 'GET':
 					return $this->handle_get();
 					
