@@ -20,7 +20,7 @@
 		private function check_attr_auth_required(?DbUser $usr, $attrs) : bool {
 			switch ($attrs['auth_required'] ?? 'guest') {
 				case 'admin':
-					return $usr !== null && $usr->get_is_admin();
+					return $usr !== null && $usr->get_fields()['is_admin'];
 					
 				case 'SET': // default choice with no extra params on attrib
 				case 'user':

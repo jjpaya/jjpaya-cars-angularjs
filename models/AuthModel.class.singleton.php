@@ -70,7 +70,7 @@ EOQ
 			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS pass_reset_tokens (
 					target_uid BIGINT NOT NULL PRIMARY KEY,
-					confirm_change_token BINARY(16) NOT NULL,
+					confirm_change_token VARCHAR(32) NOT NULL,
 					expires DATETIME NOT NULL DEFAULT (NOW() + INTERVAL 6 HOUR),
 					FOREIGN KEY(target_uid) REFERENCES users (uid) ON DELETE CASCADE
 				)
@@ -80,7 +80,7 @@ EOQ
 			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS mail_verify_tokens (
 					target_uid BIGINT NOT NULL PRIMARY KEY,
-					confirm_change_token BINARY(16) NOT NULL,
+					confirm_change_token VARCHAR(32) NOT NULL,
 					expires DATETIME NOT NULL DEFAULT (NOW() + INTERVAL 6 HOUR),
 					FOREIGN KEY(target_uid) REFERENCES users (uid) ON DELETE CASCADE
 				)
@@ -133,6 +133,131 @@ EOQ
 EOQ
 			);
 			
+			$this->db->squery(<<<'EOQ'
+				CREATE PROCEDURE IF NOT EXISTS use_recover_token(IN _target_uid BIGINT, IN _rtoken VARCHAR(32), IN _hashed_pass VARCHAR(60))
+				BEGIN
+					DECLARE err_invalid_token CONDITION FOR SQLSTATE '45000';
+					DECLARE token_valid BOOLEAN DEFAULT false;
+					
+					DECLARE EXIT HANDLER FOR SQLEXCEPTION
+					BEGIN
+						ROLLBACK;
+						RESIGNAL;
+					END;
+					
+					DELETE FROM pass_reset_tokens
+						WHERE NOW() > expires;
+					
+					START TRANSACTION;
+					
+					SELECT true INTO token_valid
+						FROM pass_reset_tokens
+						WHERE target_uid = _target_uid AND confirm_change_token = _rtoken;
+					
+					IF NOT token_valid THEN
+						SIGNAL err_invalid_token;
+					END IF;
+					
+					DELETE FROM pass_reset_tokens
+						WHERE target_uid = _target_uid AND confirm_change_token = _rtoken;
+					
+					UPDATE links_local
+						SET password = _hashed_pass
+						WHERE uid = _target_uid;
+					
+					COMMIT;
+				END
+EOQ
+			);
+			
+			$this->db->squery(<<<'EOQ'
+				CREATE PROCEDURE IF NOT EXISTS create_recover_token(IN _username VARCHAR(30), IN _token VARCHAR(32))
+				BEGIN
+					DECLARE err_user_not_found CONDITION FOR SQLSTATE '45000';
+					DECLARE selected_uid BIGINT DEFAULT 0;
+					DECLARE selected_uname VARCHAR(30) DEFAULT '';
+					DECLARE selected_email VARCHAR(256) DEFAULT '';
+
+					SELECT u.uid, u.username, l.email INTO selected_uid, selected_uname, selected_email
+					FROM users AS u
+					INNER JOIN links_local AS l ON l.uid = u.uid
+					WHERE _username IN (u.username, l.email);
+					
+					IF selected_uid = 0 THEN
+						SIGNAL err_user_not_found;
+					END IF;
+					
+					INSERT INTO pass_reset_tokens (target_uid, confirm_change_token)
+					VALUES (selected_uid, _token)
+					ON DUPLICATE KEY UPDATE confirm_change_token = VALUE(confirm_change_token), expires = VALUE(expires);
+					
+					SELECT selected_uid AS uid, selected_uname AS name, selected_email AS email;
+				END
+EOQ
+			);
+			
+			$this->db->squery(<<<'EOQ'
+				CREATE PROCEDURE IF NOT EXISTS use_verify_token(IN _target_uid BIGINT, IN _vtoken VARCHAR(32))
+				BEGIN
+					DECLARE err_invalid_token CONDITION FOR SQLSTATE '45000';
+					DECLARE token_valid BOOLEAN DEFAULT false;
+					
+					DECLARE EXIT HANDLER FOR SQLEXCEPTION
+					BEGIN
+						ROLLBACK;
+						RESIGNAL;
+					END;
+					
+					DELETE FROM mail_verify_tokens
+						WHERE NOW() > expires;
+					
+					START TRANSACTION;
+					
+					SELECT true INTO token_valid
+						FROM mail_verify_tokens
+						WHERE target_uid = _target_uid AND confirm_change_token = _vtoken;
+					
+					IF NOT token_valid THEN
+						SIGNAL err_invalid_token;
+					END IF;
+					
+					DELETE FROM mail_verify_tokens
+						WHERE target_uid = _target_uid AND confirm_change_token = _vtoken;
+					
+					UPDATE links_local
+						SET email_verified = true
+						WHERE uid = _target_uid;
+					
+					COMMIT;
+				END
+EOQ
+			);
+			
+			$this->db->squery(<<<'EOQ'
+				CREATE OR REPLACE PROCEDURE create_verification_token(IN _uid BIGINT, IN _token VARCHAR(32))
+				BEGIN
+					DECLARE err_user_not_found CONDITION FOR SQLSTATE '45000';
+					DECLARE selected_uid BIGINT DEFAULT 0;
+					DECLARE selected_uname VARCHAR(30) DEFAULT '';
+					DECLARE selected_email VARCHAR(256) DEFAULT '';
+
+					SELECT u.uid, u.username, l.email INTO selected_uid, selected_uname, selected_email
+					FROM users AS u
+					INNER JOIN links_local AS l ON l.uid = u.uid
+					WHERE u.uid = _uid;
+					
+					IF selected_uid = 0 THEN
+						SIGNAL err_user_not_found;
+					END IF;
+					
+					INSERT INTO mail_verify_tokens (target_uid, confirm_change_token)
+					VALUES (selected_uid, _token)
+					ON DUPLICATE KEY UPDATE confirm_change_token = VALUE(confirm_change_token), expires = VALUE(expires);
+					
+					SELECT selected_uid AS uid, selected_uname AS name, selected_email AS email;
+				END
+EOQ
+			);
 			
 			/**********
 			 * 
@@ -185,6 +310,67 @@ EOQ
 				CALL register_local_account(?, ?, ?)
 EOQ
 			, $username, $email, $hashed_pass);
+		}
+		
+		public function create_recovery_token_for(string $username) : array {
+			$token = bin2hex(random_bytes(16));
+			
+			$data = $this->db->pquery(<<<'EOQ'
+				CALL create_recover_token(?, ?)
+EOQ
+			, $username, $token)->fetch_assoc() ?? null;
+			
+			return [
+				'token' => $token,
+				'user' => $data
+			];
+		}
+		
+		public function check_recover_token_validity(int $uid, string $token) : bool {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT 1 AS ok
+				FROM pass_reset_tokens
+				WHERE target_uid = ? AND confirm_change_token = ?
+EOQ
+			, $uid, $token)->fetch_assoc()['ok'] ?? false;
+		}
+		
+		public function use_recover_token(int $uid, string $token, string $new_hashed_pass) : bool {
+			return boolval($this->db->pquery(<<<'EOQ'
+				CALL use_recover_token(?, ?, ?)
+EOQ
+			, $uid, $token, $new_hashed_pass));
+		}
+		
+		
+		public function create_verification_token_for(int $uid) : array {
+			$token = bin2hex(random_bytes(16));
+			
+			$data = $this->db->pquery(<<<'EOQ'
+				CALL create_verification_token(?, ?)
+EOQ
+			, $uid, $token)->fetch_assoc() ?? null;
+			
+			return [
+				'token' => $token,
+				'user' => $data
+			];
+		}
+		
+		public function check_verify_token_validity(int $uid, string $token) : bool {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT 1 AS ok
+				FROM mail_verify_tokens
+				WHERE target_uid = ? AND confirm_change_token = ?
+EOQ
+			, $uid, $token)->fetch_assoc()['ok'] ?? false;
+		}
+		
+		public function use_verify_token(int $uid, string $token) : bool {
+			return boolval($this->db->pquery(<<<'EOQ'
+				CALL use_verify_token(?, ?, ?)
+EOQ
+			, $uid, $token));
 		}
 	}
 ?>

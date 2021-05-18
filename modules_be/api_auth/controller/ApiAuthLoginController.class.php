@@ -18,7 +18,7 @@
 			
 			$accdata = $am->get_local_account_info($usrn);
 			
-			if (!$accdata || !password_verify($pass, $accdata['password'])) {
+			if (!$accdata || !password_verify(hash('sha384', $pass, true), $accdata['password'])) {
 				http_response_code(404);
 				echo json_encode([
 					'ok' => false,

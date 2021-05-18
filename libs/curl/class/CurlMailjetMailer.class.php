@@ -4,19 +4,23 @@
 		private static ?string $from_email = null;
 		private static ?string $from_name = null;
 		
-		public function __construct() {
+		public function __construct(?string $name = null) {
 			parent::__construct();
 
 			parent::setDefaultOptions();
 			parent::setAuthCredentials(Config::get_mailjet_user(), Config::get_mailjet_pass());
 			parent::addHeader('Content-Type', 'application/json');
 			
-			if (self::from_email === null) {
-				self::from_email = Config::get_mailjet_email();
+			if (self::$from_email === null) {
+				self::$from_email = Config::get_mailjet_email();
 			}
 			
-			if (self::from_name === null) {
-				self::from_name = 'Webpage mailer';
+			if ($name !== null) {
+				self::$from_name = $name;
+			}
+			
+			if (self::$from_name === null) {
+				self::$from_name = 'Webpage mailer';
 			}
 		}
 		

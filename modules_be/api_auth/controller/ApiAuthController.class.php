@@ -6,6 +6,8 @@
 				case 'register': return ApiAuthRegisterController::class;
 				case 'info':     return ApiAuthInfoController::class;
 				case 'logout':   return ApiAuthLogoutController::class;
+				case 'recover':  return ApiAuthRecoverController::class;
+				case 'verify':   return ApiAuthVerifyController::class;
 			}
 			
 			return Err404Controller::class;
