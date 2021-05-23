@@ -119,7 +119,7 @@ function addfuncs(arr) {
 	arr.once = (ev, fn) => fn ? (bindEvtOnce(arr, ev, fn), arr) : mkprom(r => bindEvtOnce(arr, ev, r));
 	arr.click = fn => fn ? arr.on('click', fn) : arr.once('click');
 	arr.addClass = cl => (arr.forEach(elm => elm.classList.add(cl)), arr);
-	arr.hasClass = cl => (arr.reduce((sum, elm) => sum + elm.classList.contains(cl), 0), arr);
+	arr.hasClass = cl => arr.reduce((sum, elm) => sum + elm.classList.contains(cl), 0);
 	arr.delClass = cl => (arr.forEach(elm => elm.classList.remove(cl)), arr);
 	arr.text = v => (arr.forEach(elm => elm.innerText = v), arr);
 	arr.html = v => (arr.forEach(elm => elm.innerHTML = v), arr);

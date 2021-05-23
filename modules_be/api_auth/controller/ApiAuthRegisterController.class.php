@@ -26,10 +26,9 @@
 				$uid = $am->register_local_account($usrn, $email, $hpass)
 						->fetch_assoc()['inserted_uid'];
 				
-				echo json_encode([
-					'ok' => true,
-					'uid' => $uid
-				]);
+				// make the client log in at the same time
+				http_response_code(307);
+				header('Location: /api/auth/login');
 				
 			} catch (Exception $e) {
 				echo json_encode([
