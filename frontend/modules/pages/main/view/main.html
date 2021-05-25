@@ -1,0 +1,44 @@
+<div class="page main">
+	<div class="ng-hide">
+		<!-- https://html.spec.whatwg.org/multipage/links.html#link-type-stylesheet -->
+		<link rel="stylesheet" href="/modules/pages/main/view/css/main.css" type="text/css" />
+	</div>
+
+	<div class="carousel-track card">
+		<div class="c-car" ng-repeat="car in $ctrl.carouselCarData track by car.car_id" style="background-image: url({{$ctrl.getCarImgUrl(car)}});" ng-click="$ctrl.carClick(car)">
+			<span class="c-car-name">{{car.brand_name}} {{car.model}}</span>
+			<span class="c-car-price">{{car.price_eur_cent / 100 | currency:'€'}}</span>
+		</div>
+	</div>
+
+	<div class="card">
+		<h2>Welcome to JJPaya Cars!</h2>
+		<hr>
+		<p>Please select a page on the navigation bar.</p>
+		<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
+		sed diam nonummy nibh euismod tincidunt ut laoreet dolore
+		magna aliquam erat volutpat. Ut wisi enim ad minim veniam,
+		quis nostrud exerci tation ullamcorper suscipit lobortis nisl
+		ut aliquip ex ea commodo consequat. Duis autem vel eum iriure
+		dolor in hendrerit in vulputate velit esse molestie consequat,
+		vel illum dolore eu feugiat nulla facilisis at vero eros et
+		accumsan et iusto odio dignissim qui blandit praesent luptatum
+		zzril delenit augue duis dolore te feugait nulla facilisi.
+		Nam liber tempor cum soluta nobis eleifend option congue
+		nihil imperdiet doming id quod mazim placerat facer possim
+		assum. Typi non habent claritatem insitam; est usus legentis
+		in iis qui facit eorum claritatem. Investigationes
+		demonstraverunt lectores legere me lius quod ii legunt saepius.
+		Claritas est etiam processus dynamicus, qui sequitur mutationem
+		consuetudium lectorum. Mirum est notare quam littera gothica,
+		quam nunc putamus parum claram, anteposuerit litterarum formas
+		humanitatis per seacula quarta decima et quinta decima. Eodem
+		modo typi, qui nunc nobis videntur parum clari, fiant sollemnes
+		in futurum.</p>
+	</div>
+	<div class="card">
+		<div class="brand-scroller">
+			<div class="s-brand" ng-repeat="brand in $ctrl.scrollerBrandData track by brand.brand_id" style="background-image: url({{brand.img}});" ng-click="$ctrl.brandClick(brand)"></div>
+		</div>
+	</div>
+</div>

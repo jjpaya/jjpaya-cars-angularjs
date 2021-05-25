@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html ng-app="jjcars" ng-strict-di>
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title ng-bind="title">JJCars</title>
+
+		<link rel="stylesheet" href="/assets/css/common.css">
+
+		<!--<link rel="stylesheet" href="/lib/glider.min.css">
+		<script type="text/javascript" src="/lib/glider.min.js" defer></script>-->
+
+		<script type="text/javascript" src="/lib/angular.min.js" defer></script>
+		<script type="text/javascript" src="/lib/angular-route.min.js" defer></script>
+		<script type="text/javascript" src="/lib/angular-touch.min.js" defer></script>
+		<script type="text/javascript" src="/lib/angular-sanitize.min.js" defer></script>
+		<script type="text/javascript" src="/lib/i18n/angular-locale_en.js" defer></script>
+		<script type="text/javascript" src="/lib/i18n/angular-locale_es.js" defer></script>
+		<script type="text/javascript" src="/lib/i18n/angular-locale_ca.js" defer></script>
+		<script type="module" src="/main.js" defer></script>
+	</head>
+	<body>
+		<jjc-header></jjc-header>
+		<div ng-view></div>
+		<jjc-footer></jjc-footer>
+	</body>
+</html>

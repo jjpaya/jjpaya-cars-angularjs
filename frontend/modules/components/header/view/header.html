@@ -1,0 +1,86 @@
+<div class="header">
+	<div class="ng-hide">
+		<!-- https://html.spec.whatwg.org/multipage/links.html#link-type-stylesheet -->
+		<link rel="stylesheet" href="/modules/components/header/view/css/navbar.css" type="text/css" />
+		<link rel="stylesheet" href="/modules/components/header/view/css/auth.css" type="text/css" />
+	</div>
+	
+	<img src="{{$ctrl.viewPath}}/img/logo.png" title="{{$ctrl.pageBrand}}">
+	<nav>
+		<a href="#/main"    ng-class="$ctrl.currentp('main')">Main</a>
+		<a href="#/cars"    ng-class="$ctrl.currentp('cars')">Cars</a>
+		<a href="#/shop"    ng-class="$ctrl.currentp('shop')">Shop</a>
+		<a href="#/contact" ng-class="$ctrl.currentp('contact')">Contact</a>
+	</nav>
+	
+	<span class="lang">
+		<a data-tr-switch="es" href="javascript:void(0)" title="ES">
+			<img src="{{$ctrl.viewPath}}/img/es.png" alt="ES">
+		</a>
+		<a data-tr-switch="en" href="javascript:void(0)" title="EN">
+			<img src="{{$ctrl.viewPath}}/img/en.png" alt="EN">
+		</a>
+	</span>
+	
+	<div class="search">
+		<input type="text" id="h-search" placeholder="Search cars...">
+		<div id="h-autocomplete" class="hidden"></div>
+	</div>
+	
+	<div class="head-auth">
+		<button ng-click="$ctrl.modal('login')"    ng-show="!$ctrl.user">Login</button>
+		<button ng-click="$ctrl.modal('register')" ng-show="!$ctrl.user">Register</button>
+		<button ng-click="$ctrl.modal('logoff')"   ng-show="$ctrl.user">Log off</button>
+		<button ng-click="$ctrl.modal('profile')"  ng-show="$ctrl.user">
+			<img src="{{$ctrl.viewPath}}/img/user-ph.png" alt="Profile">
+		</button>
+	
+		<div class="ha-popup login-popup" ng-show="$ctrl.curModal == 'login'">
+			<div>
+				<form name="loginf" ng-submit="$ctrl.logInLocal()">
+					<div class="fieldtitle">Login name:</div>
+					<input ng-model="$ctrl.loginForm.username" type="text" name="usrn" ng-pattern="/^[a-zA-Z0-9_.-]+$/" maxlength="30" autocomplete="username" required>
+					<div class="fieldtitle">Password: <a href="#/resetpw">(forgot?)</a></div>
+					<input type="password" name="pass" maxlength="256" autocomplete="current-password" required>
+	
+					<div><label><input ng-model="$ctrl.loginForm.persist" type="checkbox"><span class="fieldtitle">Remember me</span></label></div>
+
+					<input type="submit" value="Login">
+					<div ng-show="$ctrl.loginFailed" class="err"><b>Bad username or password!</b></div>
+					<div ng-show="!loginf.usrn.valid" class="err"><b>Usernames can't have those characters!</b></div>
+				</form>
+			</div>
+		</div>
+		<div class="ha-popup register-popup" ng-show="$ctrl.curModal == 'register'">
+			<div>
+				<form name="regf" ng-submit="$ctrl.registerLocal()">
+					<div class="fieldtitle">User name:</div>
+					<input ng-model="$ctrl.registerForm.username" name="usrn" type="text" ng-pattern="/^[a-zA-Z0-9_.-]+$/" maxlength="30" autocomplete="nickname" required>
+					<div ng-show="!regf.usrn.valid" class="err"><b>Usernames can't have those characters!</b></div>
+					
+					<div class="fieldtitle">Mail address:</div>
+					<input ng-model="$ctrl.registerForm.email" type="email" maxlength="256" autocomplete="email" required>
+	
+					<div class="fieldtitle">Password:</div>
+					<input ng-model="$ctrl.registerForm.password" type="password" name="pass" maxlength="256" autocomplete="new-password" required>
+	
+					<div class="fieldtitle">Confirm password:</div>
+					<input ng-pattern="$ctrl.registerForm.password" name="pwconf" type="password" maxlength="256" autocomplete="new-password" required>
+					<div ng-show="!regf.pwconf.valid"><b>Passwords do not match.</b></div>
+	
+					<input ng-disabled="!regf.valid" type="submit" value="Register">
+					<div class="err" ng-show="$ctrl.registerFailed"><b>Display, login name or mail already in use!</b></div>
+				</form>
+			</div>
+		</div>
+		<div class="ha-popup logoff-popup" ng-show="$ctrl.curModal == 'logoff'">
+			<div>
+				<form ng-submit="$ctrl.logOff()">
+					<div>Are you sure you want to log off?</div>
+					<input type="submit" value="Log off" />
+				</form>
+			</div>
+		</div>
+		<a href="javascript:void(0)" ng-click="$ctrl.modal(null)" ng-show="$ctrl.curModal" class="ha-popup-dismisser"></a>
+	</div>
+</div>

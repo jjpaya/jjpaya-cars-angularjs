@@ -1,0 +1,73 @@
+.c-car {
+	background-position: center;
+	background-size: cover;
+	/* background-repeat: no-repeat; */
+	min-height: 189px;
+	min-width: 21vw;
+	border: 1px solid #777;
+	box-shadow: inset 0px 0px 2px 0px;
+	border-radius: 4px;
+	margin-right: 10px;
+	display: flex;
+	align-items: flex-end;
+	padding-bottom: 12px;
+	box-sizing: border-box;
+	justify-content: center;
+}
+
+.c-car:not(:active):hover {
+	opacity: 0.9;
+}
+
+.c-car-name {
+	text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
+    color: #FFF;
+}
+
+.c-car-price {
+	opacity: 0.8;
+	font-size: 7pt;
+	color: #FFF;
+	text-shadow: 0 0 3px black, 0 0 3px black, 0 0 3px black;
+}
+
+.c-car-price:before {
+	content: '(';
+}
+
+.c-car-price:after {
+	content: ')';
+}
+
+.carousel-track {
+	display: flex;
+	overflow-x: auto;
+}
+
+.s-brand {
+	cursor: pointer;
+	border: 1px solid #777;
+	box-shadow: inset 0px 0px 2px 0px;
+	border-radius: 4px;
+	margin: 15px;
+    border: 1px solid;
+    height: 80px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    flex: 1 1 40%;
+}
+
+.s-brand:hover {
+	background-color: #EEE;
+}
+
+.s-brand:active {
+	background-color: #DDD;
+}
+
+
+.brand-scroller {
+    display: flex;
+    flex-wrap: wrap;
+}
