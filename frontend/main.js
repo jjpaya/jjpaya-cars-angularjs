@@ -30,7 +30,7 @@ jjcars.config(['$routeProvider', $routeProvider => {
 				
 			})
 			
-			.when('/shop', {
+			.when('/shop', { // $routeParams
 				
 			})
 			

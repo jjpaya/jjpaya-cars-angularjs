@@ -26,11 +26,14 @@ export default class HeaderCtrl {
 	
 	modal(name) {
 		this.curModal = name;
-		console.log(this);
 	}
 	
-	logInLocal() {
-		this._Auth.logInLocal();
+	async loginLocal() {
+		try {
+			var res = await this._Auth.loginLocal(this.loginForm.username, this.loginForm.password);
+		} catch (e) {
+			console.log(e);
+		}
 	}
 	
 	registerLocal() {

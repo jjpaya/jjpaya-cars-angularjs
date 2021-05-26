@@ -37,17 +37,17 @@
 	
 		<div class="ha-popup login-popup" ng-show="$ctrl.curModal == 'login'">
 			<div>
-				<form name="loginf" ng-submit="$ctrl.logInLocal()">
+				<form name="loginf" ng-submit="$ctrl.loginLocal()">
 					<div class="fieldtitle">Login name:</div>
 					<input ng-model="$ctrl.loginForm.username" type="text" name="usrn" ng-pattern="/^[a-zA-Z0-9_.-]+$/" maxlength="30" autocomplete="username" required>
 					<div class="fieldtitle">Password: <a href="#/resetpw">(forgot?)</a></div>
-					<input type="password" name="pass" maxlength="256" autocomplete="current-password" required>
+					<input ng-model="$ctrl.loginForm.password" type="password" name="pass" maxlength="256" autocomplete="current-password" required>
 	
 					<div><label><input ng-model="$ctrl.loginForm.persist" type="checkbox"><span class="fieldtitle">Remember me</span></label></div>
 
-					<input type="submit" value="Login">
+					<input ng-disabled="!loginf.$valid" type="submit" value="Login">
 					<div ng-show="$ctrl.loginFailed" class="err"><b>Bad username or password!</b></div>
-					<div ng-show="!loginf.usrn.valid" class="err"><b>Usernames can't have those characters!</b></div>
+					<div ng-show="!loginf.usrn.$pristine && !loginf.usrn.$valid" class="err"><b>Usernames can't have those characters!</b></div>
 				</form>
 			</div>
 		</div>
@@ -56,19 +56,20 @@
 				<form name="regf" ng-submit="$ctrl.registerLocal()">
 					<div class="fieldtitle">User name:</div>
 					<input ng-model="$ctrl.registerForm.username" name="usrn" type="text" ng-pattern="/^[a-zA-Z0-9_.-]+$/" maxlength="30" autocomplete="nickname" required>
-					<div ng-show="!regf.usrn.valid" class="err"><b>Usernames can't have those characters!</b></div>
+					<div ng-show="!regf.usrn.$pristine && !regf.usrn.$valid" class="err"><b>Usernames can't have those characters!</b></div>
 					
 					<div class="fieldtitle">Mail address:</div>
-					<input ng-model="$ctrl.registerForm.email" type="email" maxlength="256" autocomplete="email" required>
+					<input ng-model="$ctrl.registerForm.email" type="email" name="mail" maxlength="256" autocomplete="email" required>
+					<div ng-show="!regf.mail.$pristine && !regf.mail.$valid"><b>Email address is incomplete.</b></div>
 	
 					<div class="fieldtitle">Password:</div>
-					<input ng-model="$ctrl.registerForm.password" type="password" name="pass" maxlength="256" autocomplete="new-password" required>
+					<input ng-model="$ctrl.registerForm.password" type="password" name="pass" maxlength="256" autocomplete="new-password" required/>
 	
 					<div class="fieldtitle">Confirm password:</div>
-					<input ng-pattern="$ctrl.registerForm.password" name="pwconf" type="password" maxlength="256" autocomplete="new-password" required>
-					<div ng-show="!regf.pwconf.valid"><b>Passwords do not match.</b></div>
+					<input ng-model="$ctrl.registerForm.conf_password" ng-pattern="$ctrl.registerForm.password" name="pwconf" type="password" maxlength="256" autocomplete="new-password" required/>
+					<div ng-show="!regf.pwconf.$pristine && !regf.pwconf.$valid"><b>Passwords do not match.</b></div>
 	
-					<input ng-disabled="!regf.valid" type="submit" value="Register">
+					<input ng-disabled="!regf.$valid" type="submit" value="Register">
 					<div class="err" ng-show="$ctrl.registerFailed"><b>Display, login name or mail already in use!</b></div>
 				</form>
 			</div>
