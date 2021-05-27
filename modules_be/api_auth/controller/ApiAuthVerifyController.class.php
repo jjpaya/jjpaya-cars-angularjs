@@ -44,8 +44,10 @@
 		
 		/* Uses token, verifies account if valid */
 		public function handle_post() : bool {
-			$token = $_POST['token'] ?? null;
-			$uid = nintval($_POST['uid'] ?? null);
+			$post = self::get_json_post();
+			
+			$token = $post['token'] ?? null;
+			$uid = nintval($post['uid'] ?? null);
 
 			if (!$token || !$uid) {
 				http_response_code(400);

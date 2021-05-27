@@ -1,8 +1,10 @@
 <?php
 	class ApiAuthLoginController extends ApiRestController {
 		public function handle_post() : bool {
-			if (!array_key_exists('username', $_POST)
-					|| !array_key_exists('pass', $_POST)) {
+			$post = self::get_json_post();
+			
+			if (!array_key_exists('username', $post)
+					|| !array_key_exists('pass', $post)) {
 				http_response_code(400);
 				echo json_encode([
 					'ok' => false,
@@ -13,8 +15,8 @@
 			}
 			
 			$am = AuthModel::get_instance();
-			$usrn = $_POST['username']; // can be username or email
-			$pass = $_POST['pass'];
+			$usrn = $post['username']; // can be username or email
+			$pass = $post['pass'];
 			
 			$accdata = $am->get_local_account_info($usrn);
 			
@@ -33,7 +35,7 @@
 			
 			$sesspload = $jwt->encode([
 				'sess_uid' => $accdata['uid'],
-				'persist' => boolval($_POST['remember'] ?? false),
+				'persist' => boolval($post['remember'] ?? false),
 				'stype' => 'local',
 				'exp' => $exptime
 			]);
@@ -49,7 +51,7 @@
 			]);
 			
 			setcookie('jwtsesstoken', $sesspload, [
-				'expires' => ($_POST['remember'] ?? false) ? $exptime : 0,
+				'expires' => ($post['remember'] ?? false) ? $exptime : 0,
 				'path' => '/api/',
 				'secure' => false,  /* TODO: change to true on https */
 				'httponly' => true,

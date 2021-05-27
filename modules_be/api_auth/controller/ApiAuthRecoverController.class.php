@@ -44,9 +44,11 @@
 		
 		/* Uses token, changes password if valid */
 		public function handle_post() : bool {
-			$rectoken = $_POST['token'] ?? null;
-			$uid = nintval($_POST['uid'] ?? null);
-			$newpass = $_POST['newpass'] ?? null;
+			$post = self::get_json_post();
+			
+			$rectoken = $post['token'] ?? null;
+			$uid = nintval($post['uid'] ?? null);
+			$newpass = $post['newpass'] ?? null;
 			
 			if (!$rectoken || !$uid || !$newpass) {
 				http_response_code(400);

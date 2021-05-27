@@ -1,9 +1,11 @@
 <?php
 	class ApiAuthRegisterController extends ApiRestController {
 		public function handle_post() : bool {
-			if (!array_key_exists('username', $_POST)
-					|| !array_key_exists('email', $_POST)
-					|| !array_key_exists('pass', $_POST)) {
+			$post = self::get_json_post();
+			
+			if (!array_key_exists('username', $post)
+					|| !array_key_exists('email', $post)
+					|| !array_key_exists('pass', $post)) {
 				http_response_code(400);
 				echo json_encode([
 					'ok' => false,
@@ -13,9 +15,9 @@
 				return true;
 			}
 			
-			$usrn = $_POST['username'];
-			$email = $_POST['email'];
-			$pass = $_POST['pass'];
+			$usrn = $post['username'];
+			$email = $post['email'];
+			$pass = $post['pass'];
 			
 			$hpass = password_hash(hash('sha384', $pass, true), PASSWORD_BCRYPT, [
 				'cost' => 12

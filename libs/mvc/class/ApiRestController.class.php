@@ -1,5 +1,18 @@
 <?php
 	abstract class ApiRestController extends Controller {
+		public static function get_json_post() : array {
+			try {
+				$arr = json_decode(file_get_contents('php://input'), true);
+				if (!is_array($arr)) {
+					return ['data' => $arr];
+				}
+				
+				return $arr;
+			} catch (Exception $e) {
+				return [];
+			}
+		}
+		
 		public function handle_get() : bool { return false; }
 		public function handle_post() : bool { return false; }
 		public function handle_put() : bool { return false; }
