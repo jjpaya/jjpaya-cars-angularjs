@@ -12,12 +12,6 @@ export default class PageMainCtrl {
 			}
 		};
 		
-		/*this.carouselGlider = new $window.Glider($window.document.getElementById('carousel-track'), {
-			slidesToShow: 4,
-			slidesToScroll: 4,
-			draggable: true,
-			dots: '#c-dots'
-		});*/
 		console.log(this);
 	}
 	

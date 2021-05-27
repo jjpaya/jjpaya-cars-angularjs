@@ -45,8 +45,8 @@
 	
 					<div><label><input ng-model="$ctrl.loginForm.persist" type="checkbox"><span class="fieldtitle">Remember me</span></label></div>
 
-					<input ng-disabled="!loginf.$valid" type="submit" value="Login">
-					<div ng-show="$ctrl.loginFailed" class="err"><b>Bad username or password!</b></div>
+					<input ng-disabled="!loginf.$valid || $ctrl.requestInProgress" type="submit" value="Login">
+					<div ng-show="$ctrl.loginFailed" class="err"><b>{{$ctrl.loginFailed}}</b></div>
 					<div ng-show="!loginf.usrn.$pristine && !loginf.usrn.$valid" class="err"><b>Usernames can't have those characters!</b></div>
 				</form>
 			</div>
@@ -69,16 +69,17 @@
 					<input ng-model="$ctrl.registerForm.conf_password" ng-pattern="$ctrl.registerForm.password" name="pwconf" type="password" maxlength="256" autocomplete="new-password" required/>
 					<div ng-show="!regf.pwconf.$pristine && !regf.pwconf.$valid"><b>Passwords do not match.</b></div>
 	
-					<input ng-disabled="!regf.$valid" type="submit" value="Register">
+					<input ng-disabled="!regf.$valid || $ctrl.requestInProgress" type="submit" value="Register">
+					<div ng-show="$ctrl.registerFailed" class="err"><b>{{$ctrl.registerFailed}}</b></div>
 					<div class="err" ng-show="$ctrl.registerFailed"><b>Display, login name or mail already in use!</b></div>
 				</form>
 			</div>
 		</div>
 		<div class="ha-popup logoff-popup" ng-show="$ctrl.curModal == 'logoff'">
 			<div>
-				<form ng-submit="$ctrl.logOff()">
+				<form ng-submit="$ctrl.logout()">
 					<div>Are you sure you want to log off?</div>
-					<input type="submit" value="Log off" />
+					<input ng-disabled="$ctrl.requestInProgress" type="submit" value="Log off" />
 				</form>
 			</div>
 		</div>

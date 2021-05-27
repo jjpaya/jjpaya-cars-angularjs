@@ -1,6 +1,7 @@
 export default class AuthService {
-	constructor($http) {
+	constructor($http, $window) {
 		this._$http = $http;
+		this._$win = $window;
 		this.currentUser = null;
 		this.sessionType = 'none';
 		this.tryLoadStoredUserInfo();
@@ -16,8 +17,9 @@ export default class AuthService {
 	}
 	
 	tryLoadStoredUserInfo() {
+		var w = this._$win;
 		try {
-			this.currentUser = JSON.parse(localStorage.getItem('jwtuser').split('.')[1]);
+			this.currentUser = w.JSON.parse(w.atob(w.localStorage.getItem('jwtuser').split('.')[1]));
 			this.sessionType = this.currentUser.stype;
 		} catch (e) {
 			this.currentUser = null;
@@ -29,7 +31,7 @@ export default class AuthService {
 		var res = (await this._$http({
 			method: 'GET',
 			url: this.routes.get_user
-		})).data;
+		}).catch(r => r)).data;
 		
 		localStorage.setItem('jwtuser', res.data);
 		this.tryLoadStoredUserInfo();
@@ -42,8 +44,9 @@ export default class AuthService {
 			method: 'POST',
 			url: this.routes.login_local,
 			data: {username, pass}
-		})).data;
+		}).catch(r => r)).data;
 		
+		console.log(444, res);
 		if (!res.ok) {
 			throw new Error(res.err);
 		}
@@ -59,7 +62,7 @@ export default class AuthService {
 			method: 'POST',
 			url: this.routes.register_local,
 			data: {username, email, pass}
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -75,7 +78,7 @@ export default class AuthService {
 		var res = (await this._$http({
 			method: 'POST',
 			url: this.routes.logout,
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -90,7 +93,7 @@ export default class AuthService {
 			method: 'PUT',
 			url: this.routes.recover_pass,
 			data: {username}
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -102,8 +105,9 @@ export default class AuthService {
 	async recoverPasswordTest(uid, token) {
 		var res = (await this._$http({
 			method: 'GET',
-			url: this.routes.recover_pass + `?uid=${uid}&token=${token}`
-		})).data;
+			url: this.routes.recover_pass,
+			params: {uid, token}
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -117,7 +121,7 @@ export default class AuthService {
 			method: 'POST',
 			url: this.routes.recover_pass,
 			data: {uid, token, newpass}
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -134,7 +138,7 @@ export default class AuthService {
 		var res = (await this._$http({
 			method: 'PUT',
 			url: this.routes.verify_acc
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -146,8 +150,9 @@ export default class AuthService {
 	async verifyAccountTest(uid, token) {
 		var res = (await this._$http({
 			method: 'GET',
-			url: this.routes.verify_acc + `?uid=${uid}&token=${token}`
-		})).data;
+			url: this.routes.verify_acc,
+			params: {uid, token}
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -161,7 +166,7 @@ export default class AuthService {
 			method: 'POST',
 			url: this.routes.verify_acc,
 			data: {uid, token}
-		})).data;
+		}).catch(r => r)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);

@@ -26,3 +26,5 @@ pMainMod.config(['$routeProvider', $routeProvider => {
 		}
 	});
 }]);
+
+export default pMainMod;

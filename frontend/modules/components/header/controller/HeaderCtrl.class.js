@@ -4,14 +4,19 @@ export default class HeaderCtrl {
 		this.user = Auth.currentUser;
 		this._Auth = Auth;
 		this._$loc = $location;
+		this._$scope = $scope;
 
 		this.curModal = null;
 		this.loginForm = {};
 		this.loginFailed = false;
 		this.registerForm = {};
 		this.registerFailed = false;
+		this.requestInProgress = false;
 		
-		$scope.$watch('Auth.currentUser', user => {
+		console.log(this, Auth.currentUser);
+		
+		$scope.$watch(() => Auth.currentUser, user => {
+			console.log('usrupd', user);
 			this.user = user;
 		});
 	}
@@ -29,18 +34,44 @@ export default class HeaderCtrl {
 	}
 	
 	async loginLocal() {
+		this.loginFailed = false;
+		this.requestInProgress = true;
+		
 		try {
-			var res = await this._Auth.loginLocal(this.loginForm.username, this.loginForm.password);
+			await this._Auth.loginLocal(this.loginForm.username, this.loginForm.password);
+			this.modal(null);
 		} catch (e) {
-			console.log(e);
+			this.loginFailed = e.message;
 		}
+		
+		this.requestInProgress = false;
+		this._$scope.$apply();
 	}
 	
-	registerLocal() {
+	async registerLocal() {
+		this.registerFailed = false;
+		this.requestInProgress = true;
 		
+		try {
+			await this._Auth.registerLocal(
+				this.registerForm.username,
+				this.registerForm.email,
+				this.registerForm.password);
+			this.modal(null);
+		} catch (e) {
+			this.registerFailed = e.message;
+		}
+		
+		this.requestInProgress = false;
+		this._$scope.$apply();		
 	}
 	
-	logOff() {
-		
+	async logout() {
+		this.requestInProgress = true;
+		await this._Auth.logout();
+
+		this.requestInProgress = false;
+		this.modal(null);
+		this._$scope.$apply();
 	}
 }
