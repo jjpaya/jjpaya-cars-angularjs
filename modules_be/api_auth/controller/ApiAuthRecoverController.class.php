@@ -101,7 +101,7 @@
 				$data = $this->am->create_recovery_token_for($username);
 				
 				$mailer = new CurlMailjetMailer('JJCars');
-				$mailer->send_mail($data['user']['email'], 'Password recovery', preg_replace('/^\s*/g', '', <<<EOM
+				$mailer->send_mail($data['user']['email'], 'Password recovery', preg_replace('/^\s*/', '', <<<EOM
 					Hello!
 					
 					You have requested a password recovery for {$data['user']['name']}.

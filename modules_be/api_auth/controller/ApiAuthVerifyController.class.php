@@ -99,7 +99,7 @@
 				$data = $this->am->create_verification_token_for($uid);
 				
 				$mailer = new CurlMailjetMailer('JJCars');
-				$mailer->send_mail($data['user']['email'], 'Mail verification', preg_replace('/^\s*/g', '', <<<EOM
+				$mailer->send_mail($data['user']['email'], 'Mail verification', preg_replace('/^\s*/', '', <<<EOM
 					Hello!
 					
 					You have requested to verify your email address on JJCars for {$data['user']['name']}.

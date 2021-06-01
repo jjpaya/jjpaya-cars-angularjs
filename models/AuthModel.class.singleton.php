@@ -368,7 +368,7 @@ EOQ
 		
 		public function use_verify_token(int $uid, string $token) : bool {
 			return boolval($this->db->pquery(<<<'EOQ'
-				CALL use_verify_token(?, ?, ?)
+				CALL use_verify_token(?, ?)
 EOQ
 			, $uid, $token));
 		}
