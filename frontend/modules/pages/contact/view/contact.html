@@ -1,0 +1,24 @@
+<div class="page">
+	<div class="card">
+		<!--<div class="ng-hide">
+			<link rel="stylesheet" href="/modules/pages/contact/view/css/contact.css" type="text/css" />
+		</div>-->
+	
+		<h2>Contact form</h2>
+		<hr>
+		<p>You can contact the site admins using this form:</p>
+		
+		<form ng-submit="$ctrl.sendContactMsg()" name="contactf">
+			<div><b>From:</b></div>
+			<input type="text" value="{{$ctrl._Auth.currentUser.username}}" disabled>
+			
+			<div><b>Message:</b></div>
+			<textarea ng-model="$ctrl.contactForm.message" required></textarea>
+			
+			<div><input type="submit" ng-disabled="!contactf.$valid || !$ctrl._Auth.currentUser || $ctrl.sendState == 'ok'" value="Send"/></div>
+			<div ng-show="!$ctrl._Auth.currentUser" class="err"><b>You must be logged in to be able to send a message.</b></div>
+			<div ng-show="$ctrl.sendState == 'fail'" class="err"><b>Couldn't send the message.</b></div>
+			<div ng-show="$ctrl.sendState == 'ok'"><b>Message sent successfully!</b></div>
+		</form>
+	</div>
+</div>

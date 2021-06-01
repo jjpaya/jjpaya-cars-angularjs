@@ -55,3 +55,7 @@ body {
 div[ng-view] {
 	flex: 1;
 }
+
+.err {
+	color: red;
+}

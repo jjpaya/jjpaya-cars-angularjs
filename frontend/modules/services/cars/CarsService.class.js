@@ -1,8 +1,7 @@
 export default class CarsService {
-	constructor($http, $window) {
+	constructor($http) {
 		this._$http = $http;
-		this._$win = $window;
-		
+
 		this.ORDER = {
 			DESC_ID: 1,
 			DESC_VIEWS: 2,
