@@ -5,6 +5,7 @@ var pMainMod = angular.module('jjcars.page.main', []);
 pMainMod.controller('PageMainCtrl', [
 	'Cars',
 	'$window',
+	'$scope',
 	'carouselCarData',
 	'scrollerBrandData',
 	PageMainCtrl
@@ -24,6 +25,8 @@ pMainMod.config(['$routeProvider', $routeProvider => {
 				return Cars.getBrands();
 			}]
 		}
+	}).when('/', {
+		redirectTo: '/main'
 	});
 }]);
 

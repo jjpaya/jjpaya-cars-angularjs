@@ -1,8 +1,9 @@
 export default class HeaderCtrl {
-	constructor(AppConstants, Auth, $scope, $location) {
+	constructor(AppConstants, Auth, Cars, $scope, $location) {
 		this.pageBrand = AppConstants.pageBrand;
 		this.user = Auth.currentUser;
 		this._Auth = Auth;
+		this._Cars = Cars;
 		this._$loc = $location;
 		this._$scope = $scope;
 
@@ -11,6 +12,8 @@ export default class HeaderCtrl {
 		this.loginFailed = false;
 		this.registerForm = {};
 		this.registerFailed = false;
+		this.searchQuery = '';
+		this.carSuggestions = [];
 		this.requestInProgress = false;
 		
 		console.log(this, Auth.currentUser);
@@ -31,6 +34,35 @@ export default class HeaderCtrl {
 	
 	modal(name) {
 		this.curModal = name;
+	}
+	
+	async updateCarSearchSuggestions() {
+		if (!this.searchQuery) {
+			this.carSuggestions = [];
+			return;
+		}
+		
+		if (this.requestInProgress) {
+			return;
+		}
+		
+		this.requestInProgress = true;
+		this.carSuggestions = await this._Cars.getCarSearchSuggestions(this.searchQuery);
+		
+		// search query can change before request is finished
+		if (!this.searchQuery) {
+			this.carSuggestions = [];
+		}
+		
+		this.requestInProgress = false;
+		
+		this._$scope.$apply();
+	}
+	
+	carSearch(query) {
+		console.log(query);
+		this.searchQuery = query;
+		this.carSuggestions = [];
 	}
 	
 	async loginLocal() {

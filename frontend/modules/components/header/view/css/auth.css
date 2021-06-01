@@ -7,3 +7,45 @@
     width: 100%;
     margin: 5px 0;
 }
+
+.head-auth {
+	display: flex;
+	align-items: center;
+}
+
+.head-auth button {
+	height: fit-content;
+	min-height: 22px;
+}
+
+.head-auth .profile-btn {
+	height: 5vh;
+	box-sizing: content-box;
+	padding: 0;
+	border-radius: 50px;
+}
+
+.head-auth .profile-btn img {
+	height: inherit;
+	pointer-events: none;
+	border-radius: inherit;
+}
+
+div.profile-popup > div {
+	display: flex;
+}
+
+div.profile-popup > div > div {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	padding-left: 10px;
+}
+
+div.profile-popup hr {
+	width: 90%;
+}
+
+div.profile-popup img {
+	max-width: 40%;
+}

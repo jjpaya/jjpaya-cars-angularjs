@@ -51,3 +51,7 @@ body {
 .hide {
 	display: none;
 }
+
+div[ng-view] {
+	flex: 1;
+}

@@ -20,23 +20,27 @@ export default class CarsService {
 		}
 	}
 	
-	optionsToQuery(opts) {
-		return '?' + Object.keys(opts)
-				.map(i => i + '=' + this._$win.encodeURIComponent(opts[i]))
-				.join('&');
-	}
-	
 	async getBrands(options = {}) {
 		return (await this._$http({
 			method: 'GET',
-			url: this.routes.brands + this.optionsToQuery(options)
+			url: this.routes.brands,
+			params: options
 		})).data;
 	}
 	
 	async getCars(options = {}) {
 		return (await this._$http({
 			method: 'GET',
-			url: this.routes.cars + this.optionsToQuery(options)
+			url: this.routes.cars,
+			params: options
+		})).data;
+	}
+	
+	async getCarSearchSuggestions(query) {
+		return (await this._$http({
+			method: 'GET',
+			url: this.routes.search,
+			params: {q: query}
 		})).data;
 	}
 }

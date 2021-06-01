@@ -48,10 +48,6 @@
 	margin-left: auto;
 }
 
-#h-autocomplete.hidden {
-	display: none;
-}
-
 
 .acompl {
 	cursor: pointer;
@@ -61,7 +57,7 @@
 	background-color: #EEF;
 }
 
-.header #h-autocomplete {
+.header .h-autocomplete {
     position: absolute;
     background-color: white;
     border: 1px solid;
@@ -129,4 +125,16 @@ div.ha-popup > div {
 
 div.ha-popup.show {
 	display: block;
+}
+
+div.header .search {
+	margin-right: 5px;
+}
+
+div.header .search form {
+	display: flex;
+}
+
+div.header .search form input[type='submit'] {
+	filter: grayscale(1);
 }

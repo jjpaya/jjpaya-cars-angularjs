@@ -1,9 +1,13 @@
 import AppConstants from './config/constants.js';
+
 import './modules/services/auth/index.js';
 import './modules/services/cars/index.js';
+
 import './modules/components/footer/index.js';
 import './modules/components/header/index.js';
+
 import './modules/pages/main/index.js';
+import './modules/pages/err404/index.js';
 
 const requires = [
 	'ngRoute',
@@ -12,15 +16,15 @@ const requires = [
 	'jjcars.serv.cars',
 	'jjcars.comp.footer',
 	'jjcars.comp.header',
-	'jjcars.page.main'
+	'jjcars.page.main',
+	'jjcars.page.err404'
 ];
 
 var jjcars = angular.module('jjcars', requires);
 
 jjcars.constant('AppConstants', AppConstants);
 jjcars.config(['$routeProvider', $routeProvider => {
-	$routeProvider
-			.otherwise('/main');
+	//$routeProvider
 	/*		
 			.when('/cars', {
 				

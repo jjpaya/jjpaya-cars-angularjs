@@ -23,15 +23,19 @@
 	</span>
 	
 	<div class="search">
-		<input type="text" id="h-search" placeholder="Search cars...">
-		<div id="h-autocomplete" class="hidden"></div>
+		<form name="searchf" ng-submit="$ctrl.carSearch($ctrl.searchQuery)">
+			<input ng-model="$ctrl.searchQuery" ng-change="$ctrl.updateCarSearchSuggestions()" type="text" name="query" placeholder="Search cars..." required>
+			<input type="submit" value="&#128269;">
+		</form>
+		<div class="h-autocomplete" ng-show="$ctrl.carSuggestions.length">
+			<div class="acompl" ng-repeat="car in $ctrl.carSuggestions" ng-click="$ctrl.carSearch(car.name)">{{car.name}}</div>
+		</div>
 	</div>
 	
 	<div class="head-auth">
 		<button ng-click="$ctrl.modal('login')"    ng-show="!$ctrl.user">Login</button>
 		<button ng-click="$ctrl.modal('register')" ng-show="!$ctrl.user">Register</button>
-		<button ng-click="$ctrl.modal('logoff')"   ng-show="$ctrl.user">Log off</button>
-		<button ng-click="$ctrl.modal('profile')"  ng-show="$ctrl.user">
+		<button ng-click="$ctrl.modal('profile')"  ng-show="$ctrl.user" title="{{$ctrl.user.username}}" class="profile-btn">
 			<img src="{{$ctrl.viewPath}}/img/user-ph.png" alt="Profile">
 		</button>
 	
@@ -81,6 +85,16 @@
 					<div>Are you sure you want to log off?</div>
 					<input ng-disabled="$ctrl.requestInProgress" type="submit" value="Log off" />
 				</form>
+			</div>
+		</div>
+		<div class="ha-popup profile-popup" ng-show="$ctrl.curModal == 'profile'">
+			<div>
+				<img src="{{$ctrl.viewPath}}/img/user-ph.png" alt="Profile">
+				<div>
+					<span>{{$ctrl.user.username}}</span>
+					<hr>
+					<button ng-click="$ctrl.modal('logoff')" ng-show="$ctrl.user">Log off</button>
+				</div>
 			</div>
 		</div>
 		<a href="javascript:void(0)" ng-click="$ctrl.modal(null)" ng-show="$ctrl.curModal" class="ha-popup-dismisser"></a>

@@ -1,10 +1,14 @@
 export default class PageMainCtrl {
-	constructor(Cars, $window, carouselCarData, scrollerBrandData) {
+	constructor(Cars, $window, $scope, carouselCarData, scrollerBrandData) {
 		this._Cars = Cars;
+		this._$scope = $scope;
+		
 		this.carouselCarData = carouselCarData;
 		this.scrollerBrandData = scrollerBrandData;
 		this.scrollerEnd = this.scrollerBrandData.length === 0;
 		this.scrollerPage = 1;
+		
+		this.loadingBrands = false;
 		
 		$window.onscroll = ev => {
 			if (($window.innerHeight + $window.pageYOffset + 5) >= $window.document.body.offsetHeight) {
@@ -32,13 +36,16 @@ export default class PageMainCtrl {
 	}
 	
 	async loadMoreBrandsScroller() {
-		if (this.scrollerEnd) {
+		if (this.scrollerEnd || this.loadingBrands) {
 			return;
 		}
 		
+		this.loadingBrands = true;
 		var newData = await this._Cars.getBrands({page: ++this.scrollerPage});
 		this.scrollerEnd = newData.length === 0;
 		
+		this.loadingBrands = false;
 		this.scrollerBrandData.push(...newData);
+		this._$scope.$apply();
 	}
 }
