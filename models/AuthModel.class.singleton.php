@@ -234,7 +234,7 @@ EOQ
 			);
 			
 			$this->db->squery(<<<'EOQ'
-				CREATE OR REPLACE PROCEDURE create_verification_token(IN _uid BIGINT, IN _token VARCHAR(32))
+				CREATE PROCEDURE IF NOT EXISTS create_verification_token(IN _uid BIGINT, IN _token VARCHAR(32))
 				BEGIN
 					DECLARE err_user_not_found CONDITION FOR SQLSTATE '45000';
 					DECLARE selected_uid BIGINT DEFAULT 0;
@@ -330,7 +330,7 @@ EOQ
 			return $this->db->pquery(<<<'EOQ'
 				SELECT 1 AS ok
 				FROM pass_reset_tokens
-				WHERE target_uid = ? AND confirm_change_token = ?
+				WHERE target_uid = ? AND confirm_change_token = ? AND NOW() < expires
 EOQ
 			, $uid, $token)->fetch_assoc()['ok'] ?? false;
 		}
@@ -361,7 +361,7 @@ EOQ
 			return $this->db->pquery(<<<'EOQ'
 				SELECT 1 AS ok
 				FROM mail_verify_tokens
-				WHERE target_uid = ? AND confirm_change_token = ?
+				WHERE target_uid = ? AND confirm_change_token = ? AND NOW() < expires
 EOQ
 			, $uid, $token)->fetch_assoc()['ok'] ?? false;
 		}

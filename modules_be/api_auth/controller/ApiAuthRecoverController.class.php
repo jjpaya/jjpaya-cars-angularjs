@@ -106,7 +106,7 @@
 					
 					You have requested a password recovery for {$data['user']['name']}.
 					Click on the following link to proceed with the change:
-					http://localhost:8080/api/auth/recover?uid={$data['user']['uid']}&token={$data['token']}
+					http://localhost:8080/#/resetpw/{$data['user']['uid']}/{$data['token']}
 					
 					If you didn't request this change you may safely ingore this email, the token expires in 6 hours.
 					

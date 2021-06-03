@@ -35,7 +35,7 @@
 			
 			$sesspload = $jwt->encode([
 				'sess_uid' => $accdata['uid'],
-				'persist' => boolval($post['remember'] ?? false),
+				'persist' => boolval($post['persist'] ?? false),
 				'stype' => 'local',
 				'exp' => $exptime
 			]);
@@ -51,7 +51,7 @@
 			]);
 			
 			setcookie('jwtsesstoken', $sesspload, [
-				'expires' => ($post['remember'] ?? false) ? $exptime : 0,
+				'expires' => ($post['persist'] ?? false) ? $exptime : 0,
 				'path' => '/api/',
 				'secure' => false,  /* TODO: change to true on https */
 				'httponly' => true,

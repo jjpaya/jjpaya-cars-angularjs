@@ -94,6 +94,17 @@
 			
 			$usr = $usr->get_fields();
 			$uid = $usr['uid'];
+			$localinfo = $this->am->get_local_acct_info($uid);
+			
+			if ($localinfo['email_verified']) {
+				http_response_code(400);
+				echo json_encode([
+					'ok' => false,
+					'err' => 'Already verified!'
+				]);
+				
+				return true;
+			}
 			
 			try {
 				$data = $this->am->create_verification_token_for($uid);
@@ -104,7 +115,7 @@
 					
 					You have requested to verify your email address on JJCars for {$data['user']['name']}.
 					Click on the following link to verify your account:
-					http://localhost:8080/api/auth/verify?uid={$data['user']['uid']}&token={$data['token']}
+					http://localhost:8080/#/verify/{$data['user']['uid']}/{$data['token']}
 					
 					If you didn't request the verification you may safely ingore this email, the token expires in 6 hours.
 					
