@@ -33,6 +33,7 @@
 
 div.profile-popup > div {
 	display: flex;
+	align-items: flex-start;
 }
 
 div.profile-popup > div > div {

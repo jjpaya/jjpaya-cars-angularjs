@@ -8,7 +8,7 @@
 	<img src="{{$ctrl.viewPath}}/img/logo.png" title="{{$ctrl.pageBrand}}">
 	<nav>
 		<a href="#/main"    ng-class="$ctrl.currentp('main')">Main</a>
-		<a href="#/cars"    ng-class="$ctrl.currentp('cars')">Cars</a>
+		<a href="#/cars"    ng-class="$ctrl.currentp('cars')" ng-show="$ctrl.user.admin">Cars</a>
 		<a href="#/shop"    ng-class="$ctrl.currentp('shop')">Shop</a>
 		<a href="#/contact" ng-class="$ctrl.currentp('contact')">Contact</a>
 	</nav>
@@ -36,14 +36,14 @@
 		<button ng-click="$ctrl.modal('login')"    ng-show="!$ctrl.user">Login</button>
 		<button ng-click="$ctrl.modal('register')" ng-show="!$ctrl.user">Register</button>
 		<button ng-click="$ctrl.modal('profile')"  ng-show="$ctrl.user" title="{{$ctrl.user.username}}" class="profile-btn">
-			<img src="{{$ctrl.viewPath}}/img/user-ph.png" alt="Profile">
+			<img src="{{$ctrl.userAvatarImg}}" alt="Profile">
 		</button>
 	
 		<div class="ha-popup login-popup" ng-show="$ctrl.curModal == 'login'">
 			<div>
 				<form name="loginf" ng-submit="$ctrl.loginLocal()">
 					<div class="fieldtitle">Login name:</div>
-					<input ng-model="$ctrl.loginForm.username" type="text" name="usrn" ng-pattern="/^[a-zA-Z0-9_.-]+$/" maxlength="30" autocomplete="username" required>
+					<input ng-model="$ctrl.loginForm.username" type="text" name="usrn" ng-pattern="/^([a-zA-Z0-9_.-]+|[^\s@\x00-\x1F\x7F%!\\]+@[^\s@\x00-\x1F\x7F%!\\]+\.[^\s@\x00-\x1F\x7F%!\\]+)$/" maxlength="30" autocomplete="username" required>
 					<div class="fieldtitle">Password: <a href="#/resetpw">(forgot?)</a></div>
 					<input ng-model="$ctrl.loginForm.password" type="password" name="pass" maxlength="256" autocomplete="current-password" required>
 	
@@ -89,11 +89,14 @@
 		</div>
 		<div class="ha-popup profile-popup" ng-show="$ctrl.curModal == 'profile'">
 			<div>
-				<img src="{{$ctrl.viewPath}}/img/user-ph.png" alt="Profile">
+				<img src="{{$ctrl.userAvatarImg}}" alt="Profile">
 				<div>
 					<span>{{$ctrl.user.username}}</span>
 					<hr>
 					<button ng-click="$ctrl.modal('logoff')" ng-show="$ctrl.user">Log off</button>
+					<button ng-show="$ctrl.user.email_verified === 0" ng-click="$ctrl.requestMailVerification()" ng-disabled="$ctrl.requestInProgress || $ctrl.verifySent">Verify mail</button>
+					<div ng-show="$ctrl.verifySent === true">Mail verification sent!</div>
+					<div ng-show="$ctrl.verifySent === false" class="err">{{$ctrl.verifyErr}}</div>
 				</div>
 			</div>
 		</div>

@@ -9,6 +9,7 @@ import './modules/components/header/index.js';
 
 import './modules/pages/main/index.js';
 import './modules/pages/contact/index.js';
+import './modules/pages/verify/index.js';
 import './modules/pages/err404/index.js';
 
 const requires = [
@@ -24,15 +25,16 @@ const requires = [
 	
 	'jjcars.page.main',
 	'jjcars.page.contact',
+	'jjcars.page.verify',
 	'jjcars.page.err404'
 ];
 
 var jjcars = angular.module('jjcars', requires);
 
 jjcars.constant('AppConstants', AppConstants);
-jjcars.config(['$routeProvider', $routeProvider => {
-	//$routeProvider
-	/*		
+/*jjcars.config(['$routeProvider', $routeProvider => {
+	$routeProvider
+		
 			.when('/cars', {
 				
 			})
@@ -71,15 +73,10 @@ jjcars.config(['$routeProvider', $routeProvider => {
 			
 			.when('/resetpw/:uid/:token', {
 				
-			});*/
-}]);
+			});
+}]);*/
 
 jjcars.run(['AppConstants', '$rootScope', (AppConstants, $rootScope) => {
-	// change title on route switch
-	$rootScope.$on('$routeChangeSuccess', (event, newRoute) => {
-		$rootScope.setPageTitle(newRoute.title);
-	});
-	
 	// Helper method for setting the page's title
 	$rootScope.setPageTitle = (title) => {
 		$rootScope.title = '';
@@ -90,4 +87,9 @@ jjcars.run(['AppConstants', '$rootScope', (AppConstants, $rootScope) => {
 		
 		$rootScope.title += AppConstants.pageBrand;
 	};
+	
+	// change title on route switch
+	$rootScope.$on('$routeChangeSuccess', (event, newRoute) => {
+		$rootScope.setPageTitle(newRoute.title);
+	});
 }]);

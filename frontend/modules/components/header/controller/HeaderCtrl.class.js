@@ -15,6 +15,8 @@ export default class HeaderCtrl {
 		this.searchQuery = '';
 		this.carSuggestions = [];
 		this.requestInProgress = false;
+		this.verifySent = null;
+		this.verifyErr = null;
 		
 		console.log(this, Auth.currentUser);
 		
@@ -26,6 +28,10 @@ export default class HeaderCtrl {
 	
 	get viewPath() {
 		return '/modules/components/header/view';
+	}
+	
+	get userAvatarImg() {
+		return (this.user || {}).img || this.viewPath + '/img/user-ph.png';
 	}
 	
 	currentp(route) {
@@ -70,8 +76,13 @@ export default class HeaderCtrl {
 		this.requestInProgress = true;
 		
 		try {
-			await this._Auth.loginLocal(this.loginForm.username, this.loginForm.password);
+			await this._Auth.loginLocal(
+					this.loginForm.username,
+					this.loginForm.password,
+					this.loginForm.persist);
 			this.modal(null);
+			this.verifyErr = null;
+			this.loginForm.password = "";
 		} catch (e) {
 			this.loginFailed = e.message;
 		}
@@ -104,6 +115,20 @@ export default class HeaderCtrl {
 
 		this.requestInProgress = false;
 		this.modal(null);
+		this._$scope.$apply();
+	}
+	
+	async requestMailVerification() {
+		this.requestInProgress = true;
+		var res = {ok: false};
+		try {
+			res = await this._Auth.verifyAccountCreate();
+		} catch (err) {
+			this.verifyErr = err.message;
+		}
+		
+		this.verifySent = res.ok;
+		this.requestInProgress = false;
 		this._$scope.$apply();
 	}
 }

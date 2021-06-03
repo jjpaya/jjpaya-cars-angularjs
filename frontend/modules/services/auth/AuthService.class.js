@@ -22,12 +22,15 @@ export default class AuthService {
 			this.currentUser = w.JSON.parse(w.atob(w.localStorage.getItem('jwtuser').split('.')[1]));
 			this.sessionType = this.currentUser.stype;
 		} catch (e) {
-			this.currentUser = null;
 			this.sessionType = 'none';
+		}
+		
+		if (this.sessionType === 'none') {
+			this.currentUser = null;
 		}
 	}
 	
-	async getCurrentUser() {
+	async updateCurrentUserInfo() {
 		var res = (await this._$http({
 			method: 'GET',
 			url: this.routes.get_user
@@ -39,14 +42,13 @@ export default class AuthService {
 		return this.currentUser;
 	}
 	
-	async loginLocal(username, pass) {
+	async loginLocal(username, pass, persist) {
 		var res = (await this._$http({
 			method: 'POST',
 			url: this.routes.login_local,
-			data: {username, pass}
+			data: {username, pass, persist}
 		}).catch(r => r)).data;
 		
-		console.log(444, res);
 		if (!res.ok) {
 			throw new Error(res.err);
 		}
