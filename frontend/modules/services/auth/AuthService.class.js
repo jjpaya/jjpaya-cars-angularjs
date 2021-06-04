@@ -90,11 +90,11 @@ export default class AuthService {
 		this.tryLoadStoredUserInfo();
 	}
 	
-	async recoverPasswordCreate(username) {
+	async recoverPasswordCreate(email) {
 		var res = (await this._$http({
 			method: 'PUT',
 			url: this.routes.recover_pass,
-			data: {username}
+			data: {email}
 		}).catch(r => r)).data;
 		
 		if (!res.ok) {

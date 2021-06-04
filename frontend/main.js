@@ -10,6 +10,7 @@ import './modules/components/header/index.js';
 import './modules/pages/main/index.js';
 import './modules/pages/contact/index.js';
 import './modules/pages/verify/index.js';
+import './modules/pages/resetpw/index.js';
 import './modules/pages/err404/index.js';
 
 const requires = [
@@ -26,6 +27,7 @@ const requires = [
 	'jjcars.page.main',
 	'jjcars.page.contact',
 	'jjcars.page.verify',
+	'jjcars.page.resetpw',
 	'jjcars.page.err404'
 ];
 

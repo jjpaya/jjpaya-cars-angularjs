@@ -44,7 +44,7 @@
 				<form name="loginf" ng-submit="$ctrl.loginLocal()">
 					<div class="fieldtitle">Login name:</div>
 					<input ng-model="$ctrl.loginForm.username" type="text" name="usrn" ng-pattern="/^([a-zA-Z0-9_.-]+|[^\s@\x00-\x1F\x7F%!\\]+@[^\s@\x00-\x1F\x7F%!\\]+\.[^\s@\x00-\x1F\x7F%!\\]+)$/" maxlength="30" autocomplete="username" required>
-					<div class="fieldtitle">Password: <a href="#/resetpw">(forgot?)</a></div>
+					<div class="fieldtitle">Password: <a href="#/resetpw" ng-click="$ctrl.modal(null)">(forgot?)</a></div>
 					<input ng-model="$ctrl.loginForm.password" type="password" name="pass" maxlength="256" autocomplete="current-password" required>
 	
 					<div><label><input ng-model="$ctrl.loginForm.persist" type="checkbox"><span class="fieldtitle">Remember me</span></label></div>

@@ -1,0 +1,15 @@
+<div class="page">
+	<div class="card">
+		<h2>Request a password reset</h2>
+		<hr>
+		<p>You can reset your account's password by entering its email and clicking the button below:</p>
+		
+		<form ng-submit="$ctrl.requestPasswordReset()" name="requestf">
+			<div class="fieldtitle">Mail address:</div>
+			<div><input ng-model="$ctrl.recoverForm.email" type="email" required/></div>
+			<div><input type="submit" ng-disabled="$ctrl.requestInProgress || $ctrl.requestOk || !requestf.$valid" value="Request password reset"/></div>
+			<div ng-show="$ctrl.requestOk === false" class="err"><b>{{$ctrl.requestErr}}</b></div>
+			<div ng-show="$ctrl.requestOk === true"><b>Request ok, check your mail!</b></div>
+		</form>
+	</div>
+</div>

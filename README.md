@@ -10,12 +10,12 @@ Built with PHP 8, HTML/CSS/AngularJS 1.5 & SQL
 * Related books from Google Books API for each listing
 * Starred items
 * Shop cart
-* Logging in, registering, mail verification & password reset mail
+* Logging in, registering, avatars, mail verification & password reset mail
 * Admin controls
 
 ## Installation
 
-You will need nginx with the PHP 8.0 module.
+You will need nginx, PHP 8.0, and the curl & mysql php plugins.
 Sample config file for nginx can be found on `private/setup/nginx-config` along with a sample database.
 
 You also need to create a credentials.json file on `private/` with the following format:

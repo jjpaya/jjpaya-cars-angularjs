@@ -1,0 +1,19 @@
+<div class="page">
+	<div class="card">
+		<h2>Set a new password</h2>
+		<hr>
+		<p>Enter the new password for the account:</p>
+		
+		<form ng-submit="$ctrl.confirmResetPassword()" name="resetf">
+			<div>New password:</div>
+			<div><input ng-model="$ctrl.resetForm.password" type="password" name="pass" maxlength="256" autocomplete="new-password" required/></div>
+			<div>Confirm password:</div>
+			<div><input ng-model="$ctrl.resetForm.conf_password" ng-pattern="$ctrl.resetForm.password" name="pwconf" type="password" maxlength="256" autocomplete="new-password" required/></div>
+			<div ng-show="!resetf.pwconf.$pristine && !resetf.pwconf.$valid"><b>Passwords do not match.</b></div>
+			<div><input type="submit" ng-disabled="$ctrl.requestInProgress || $ctrl.resetOk || !$ctrl.tokenOk" value="Reset password"/></div>
+			<div ng-show="!$ctrl.tokenOk" class="err"><b>The token is not valid or has expired.</b></div>
+			<div ng-show="$ctrl.resetOk === false" class="err"><b>{{$ctrl.resetErr}}</b></div>
+			<div ng-show="$ctrl.resetOk === true"><b>Password reset correctly! You may now log in.</b></div>
+		</form>
+	</div>
+</div>
