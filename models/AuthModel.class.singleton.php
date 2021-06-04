@@ -171,7 +171,7 @@ EOQ
 			);
 			
 			$this->db->squery(<<<'EOQ'
-				CREATE PROCEDURE IF NOT EXISTS create_recover_token(IN _username VARCHAR(30), IN _token VARCHAR(32))
+				CREATE PROCEDURE IF NOT EXISTS create_recover_token(IN _email VARCHAR(256), IN _token VARCHAR(32))
 				BEGIN
 					DECLARE err_user_not_found CONDITION FOR SQLSTATE '45000';
 					DECLARE selected_uid BIGINT DEFAULT 0;
@@ -181,7 +181,7 @@ EOQ
 					SELECT u.uid, u.username, l.email INTO selected_uid, selected_uname, selected_email
 					FROM users AS u
 					INNER JOIN links_local AS l ON l.uid = u.uid
-					WHERE _username IN (u.username, l.email);
+					WHERE _email = l.email;
 					
 					IF selected_uid = 0 THEN
 						SIGNAL err_user_not_found;
@@ -312,13 +312,13 @@ EOQ
 			, $username, $email, $hashed_pass);
 		}
 		
-		public function create_recovery_token_for(string $username) : array {
+		public function create_recovery_token_for(string $email) : array {
 			$token = bin2hex(random_bytes(16));
 			
 			$data = $this->db->pquery(<<<'EOQ'
 				CALL create_recover_token(?, ?)
 EOQ
-			, $username, $token)->fetch_assoc() ?? null;
+			, $email, $token)->fetch_assoc() ?? null;
 			
 			return [
 				'token' => $token,

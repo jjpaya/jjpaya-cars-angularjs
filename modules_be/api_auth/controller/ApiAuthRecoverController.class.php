@@ -85,20 +85,21 @@
 		
 		/* Creates a token and sends mail */
 		public function handle_put() : bool {
-			$username = $_GET['username'] ?? null;
+			$post = self::get_json_post();
+			$email = $post['email'] ?? null;
 			
-			if (!$username) {
+			if (!$email) {
 				http_response_code(400);
 				echo json_encode([
 					'ok' => false,
-					'err' => 'No username or mail specified'
+					'err' => 'No mail specified'
 				]);
 				
 				return true;
 			}
 
 			try {
-				$data = $this->am->create_recovery_token_for($username);
+				$data = $this->am->create_recovery_token_for($email);
 				
 				$mailer = new CurlMailjetMailer('JJCars');
 				$mailer->send_mail($data['user']['email'], 'Password recovery', preg_replace('/^\s*/', '', <<<EOM
@@ -115,15 +116,14 @@ EOM
 				));
 				
 				echo json_encode([
-					'ok' => true,
-					'uid' => $data['uid']
+					'ok' => true
 				]);
 				
 			} catch (Exception $e) {
 				http_response_code(400);
 				echo json_encode([
 					'ok' => false,
-					'err' => $e->getMessage()
+					'err' => $e instanceof mysqli_sql_exception ? $e->getCode() : $e->getMessage()
 				]);
 			}
 			
