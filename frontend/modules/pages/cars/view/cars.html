@@ -1,0 +1,71 @@
+<div class="page">
+	<div class="card">
+		<h2>Car Listing</h2>
+		<hr>
+		<p>You can view the available cars below,
+		or <a href="javascript:void(0)" ng-click="$ctrl.createCar()">Create a new listing</a>.</p> 
+	</div>
+	<div class="card car">
+		<table id="car-table">
+			<thead>
+				<tr>
+					<th>ID</th>
+					<th>Number plate</th>
+					<th>Created</th>
+					<th>Brand name</th>
+					<th>Model</th>
+					<th>KMs</th>
+					<th>Price</th>
+					<th>Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="car in $ctrl.visibleCars track by car.car_id">
+					<td>{{car.car_id}}</td>
+					<td>{{car.num_plate}}</td>
+					<td>{{car.created}}</td>
+					<td>{{car.brand_name}}</td>
+					<td>{{car.model}}</td>
+					<td>{{car.kms}}</td>
+					<td>{{car.price_eur_cent / 100 | currency:'€'}}</td>
+					<td>
+						<button ng-click="$ctrl.readCar(car)">Read</button>
+						<button ng-click="$ctrl.delCar(car)">Delete</button>
+						<button ng-click="$ctrl.updCar(car)">Update</button>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<div class="popup create-popup" ng-show="$ctrl.curModal == 'create'">
+		<div>
+			test
+		</div>
+	</div>
+	<div class="popup read-popup" ng-show="$ctrl.curModal == 'read'">
+		<div>
+			<h3>Reading car {{$ctrl.carToRead.car_id}}</h3>
+			<hr>
+			<div ng-repeat="(key, val) in $ctrl.carToRead">
+				<b>{{key}}: </b>
+				<span>{{val}}</span>
+			</div>
+		</div>
+	</div>
+	<div class="popup update-popup" ng-show="$ctrl.curModal == 'update'">
+		<div>
+			test3
+		</div>
+	</div>
+	<div class="popup delete-popup" ng-show="$ctrl.curModal == 'delete'">
+		<div>
+			<h3>Deleting car {{$ctrl.carToDelete.car_id}}</h3>
+			<hr>
+			<div>Are you sure you want to delete car {{$ctrl.carToDelete.car_id}}?</div>
+			<button ng-click="$ctrl.modal(null)" ng-disabled="$ctrl.requestInProgress">No</button>
+			<button ng-click="$ctrl.delCarConfirm()" ng-disabled="$ctrl.requestInProgress">Yes</button>
+			<div class="err" ng-show="$ctrl.carDeletionErr">{{$ctrl.carDeletionErr}}</div>
+		</div>
+	</div>
+	<a href="javascript:void(0)" ng-click="$ctrl.modal(null)" ng-show="$ctrl.curModal" class="popup-dismisser"></a>
+</div>

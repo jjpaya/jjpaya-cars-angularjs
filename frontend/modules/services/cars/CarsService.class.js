@@ -42,4 +42,12 @@ export default class CarsService {
 			params: {q: query}
 		})).data;
 	}
+	
+	async deleteCar(id) {
+		return (await this._$http({
+			method: 'DELETE',
+			url: this.routes.car_admin,
+			params: {id}
+		})).data;
+	}
 }
