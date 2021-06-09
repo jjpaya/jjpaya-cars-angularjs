@@ -8,7 +8,10 @@ pCarsMod.controller('PageCarsCtrl', [
 	'Cars',
 	'$scope',
 	'$route',
+	'$filter',
 	'initialCarsData',
+	'brands',
+	'totalCars',
 	PageCarsCtrl
 ]);
 
@@ -23,6 +26,12 @@ pCarsMod.config(['$routeProvider', $routeProvider => {
 			authGuard,
 			initialCarsData: ['Cars', Cars => {
 				return Cars.getCars({order: Cars.ORDER.DESC_ID});
+			}],
+			brands: ['Cars', Cars => {
+				return Cars.getBrands({limit: 100});
+			}],
+			totalCars: ['Cars', Cars => {
+				return Cars.getTotalCars();
 			}]
 		}
 	});

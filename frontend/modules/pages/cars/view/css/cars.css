@@ -1,0 +1,12 @@
+.car-crud {
+	overflow-x: auto;
+}
+
+.car-crud table {
+	min-width: max-content;
+	width: 100%;
+}
+
+.car-crud td:last-child, .car-crud th:last-child {
+	text-align: center;
+}

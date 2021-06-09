@@ -1,11 +1,14 @@
 <div class="page">
+	<div class="ng-hide">
+		<link rel="stylesheet" href="/modules/pages/cars/view/css/cars.css" type="text/css" />
+	</div>
 	<div class="card">
 		<h2>Car Listing</h2>
 		<hr>
 		<p>You can view the available cars below,
 		or <a href="javascript:void(0)" ng-click="$ctrl.createCar()">Create a new listing</a>.</p> 
 	</div>
-	<div class="card car">
+	<div class="card car-crud">
 		<table id="car-table">
 			<thead>
 				<tr>
@@ -37,9 +40,129 @@
 			</tbody>
 		</table>
 	</div>
-	<div class="popup create-popup" ng-show="$ctrl.curModal == 'create'">
+	<div class="card pager">
+		<span ng-repeat="page in $ctrl.pages">
+			<a href="javascript:void(0)" ng-click="$ctrl.changePage(page)">{{page}}</a>
+			<span> </span>
+		</span>
+	</div>
+	<div class="popup create-popup" ng-show="$ctrl.curModal == 'create' || $ctrl.curModal == 'update'">
 		<div>
-			test
+			<h3>{{$ctrl.capitalize($ctrl.curModal)}} car</h3>
+			<hr>
+			<p>Please fill out the form to create a new car listing:</p>
+			<form id="car-f-form" ng-submit="$ctrl[$ctrl.curModal + 'CarConfirm']()" name="ccarf" class="table">
+				<div>
+					<div>
+						<label>Number Plate:</label>
+					</div>
+					<div>
+						<input id="car-f-npl" ng-model="$ctrl.newCarForm.num_plate" required ng-pattern="/^[0-9]{4}[A-Z]{3}$/" maxlength="7" type="text" name="num_plate"/>
+						<div class="err" ng-show="!ccarf.num_plate.$pristine && !ccarf.num_plate.$valid">The number plate must not be empty and must match the format 1234ABC.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Registration date:</label>
+					</div>
+					<div>
+						<input id="car-f-rdat" ng-model="$ctrl.newCarForm.reg_date" required type="date" name="reg_date"/>
+						<div class="err" ng-show="!ccarf.reg_date.$pristine && !ccarf.reg_date.$valid">Must not be empty.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Brand:</label>
+					</div>
+					<div>
+						<select id="car-f-brn" ng-model="$ctrl.newCarForm.brand_id" required name="brand_id">
+							<option ng-repeat="brand in $ctrl.brands track by brand.brand_id" value="{{brand.brand_id}}">
+								{{brand.name}}
+							</option>
+						</select>
+						<div class="err" ng-show="!ccarf.brand_id.$pristine && !ccarf.brand_id.$valid">Must select a brand.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Model:</label>
+					</div>
+					<div>
+						<input id="car-f-mdl" ng-model="$ctrl.newCarForm.model" required ng-pattern="/^[a-zA-Z0-9 ]+$/" maxlength="24" type="text" name="model"/>
+						<div class="err" ng-show="!ccarf.model.$pristine && !ccarf.model.$valid">Model must not be empty and not contain special characters.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Color:</label>
+					</div>
+					<div>
+						<input id="car-f-clr" ng-model="$ctrl.newCarForm.color" required type="color" name="color"/>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>KMs:</label>
+					</div>
+					<div>
+						<input id="car-f-kms" ng-model="$ctrl.newCarForm.kms" required min="0" max="999999" type="number" name="kms"/>
+						<div class="err" ng-show="!ccarf.kms.$pristine && !ccarf.kms.$valid">KM count must not be empty, and must be less than 999999.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>ITV:</label>
+					</div>
+					<div>
+						<input id="car-f-itv" ng-model="$ctrl.newCarForm.itv" type="checkbox" name="itv"/>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Wheel Power:</label>
+					</div>
+					<div>
+						<input id="car-f-wp-fr" ng-model="$ctrl.newCarForm.wheel_power" type="radio" name="wheel_power" value="front" checked/>
+						<label for="car-f-wp-fr">Front</label>
+						
+						<input id="car-f-wp-re" ng-model="$ctrl.newCarForm.wheel_power" type="radio" name="wheel_power" value="rear"/>
+						<label for="car-f-wp-re">Rear</label>
+						
+						<input id="car-f-wp-all" ng-model="$ctrl.newCarForm.wheel_power" type="radio" name="wheel_power" value="all"/>
+						<label for="car-f-wp-all">All</label>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Price:</label>
+					</div>
+					<div>
+						<input id="car-f-pri" ng-model="$ctrl.newCarForm.price_eur_cent" required min="10000" max="500000000" type="number" value="100000" step="10000" name="price_eur_cent"/>
+						<div class="err" ng-show="!ccarf.price_eur_cent.$pristine && !ccarf.price_eur_cent.$valid">Must have a price.</div>
+					</div>
+				</div>
+				
+				<div>
+					<div>
+						<label>Description:</label>
+					</div>
+					<div>
+						<textarea id="car-f-desc" ng-model="$ctrl.newCarForm.description" required maxlength="255" name="description"></textarea>
+						<div class="err" ng-show="!ccarf.description.$pristine && !ccarf.description.$valid">Description must not be empty.</div>
+					</div>
+				</div>
+				
+				<div><input id="car-f-create" type="submit" ng-disabled="!ccarf.$valid" value="{{$ctrl.capitalize($ctrl.curModal)}}"/></div>
+				<div class="err" ng-show="$ctrl.carReqErr">{{$ctrl.carReqErr}}</div>
+			</form>
 		</div>
 	</div>
 	<div class="popup read-popup" ng-show="$ctrl.curModal == 'read'">
@@ -50,11 +173,6 @@
 				<b>{{key}}: </b>
 				<span>{{val}}</span>
 			</div>
-		</div>
-	</div>
-	<div class="popup update-popup" ng-show="$ctrl.curModal == 'update'">
-		<div>
-			test3
 		</div>
 	</div>
 	<div class="popup delete-popup" ng-show="$ctrl.curModal == 'delete'">

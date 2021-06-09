@@ -29,6 +29,7 @@
 		
 		public static function get_subcontroller(array $url_path) : ?string {
 			switch ($url_path[0] ?? '.') {
+				case 'admin':   return ApiCarsAdminController::class;
 				case 'brands':  return ApiCarsBrandsController::class;
 				case 'total':   return ApiCarsTotalController::class;
 				case 'details': return ApiCarsDetailsController::class;

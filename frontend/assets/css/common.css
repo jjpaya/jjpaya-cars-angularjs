@@ -59,3 +59,15 @@ div[ng-view] {
 .err {
 	color: red;
 }
+
+.table {
+	display: table;
+}
+
+.table > div {
+	display: table-row;
+}
+
+.table > div > div {
+	display: table-cell;
+}

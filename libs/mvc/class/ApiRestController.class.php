@@ -16,6 +16,7 @@
 		public function handle_get() : bool { return false; }
 		public function handle_post() : bool { return false; }
 		public function handle_put() : bool { return false; }
+		public function handle_patch() : bool { return false; }
 		public function handle_delete() : bool { return false; }
 
 		public function send_special() : bool {
@@ -25,6 +26,9 @@
 					
 				case 'PUT':
 					return $this->handle_put();
+					
+				case 'PATCH':
+					return $this->handle_patch();
 					
 				case 'GET':
 					return $this->handle_get();
