@@ -39,14 +39,6 @@ var jjcars = angular.module('jjcars', requires);
 jjcars.constant('AppConstants', AppConstants);
 /*jjcars.config(['$routeProvider', $routeProvider => {
 	$routeProvider
-		
-			.when('/cars', {
-				
-			})
-			
-			.when('/cars/create', {
-				
-			})
 			
 			.when('/shop', { // $routeParams
 				

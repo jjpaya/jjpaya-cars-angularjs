@@ -57,7 +57,7 @@ export default class CarsService {
 			method: 'POST',
 			url: this.routes.car_admin,
 			data: data
-		})).data;
+		}).catch(e => e)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -71,7 +71,7 @@ export default class CarsService {
 			method: 'PATCH',
 			url: this.routes.car_admin,
 			data: data
-		})).data;
+		}).catch(e => e)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);
@@ -85,7 +85,7 @@ export default class CarsService {
 			method: 'DELETE',
 			url: this.routes.car_admin,
 			params: {id}
-		})).data;
+		}).catch(e => e)).data;
 		
 		if (!res.ok) {
 			throw new Error(res.err);

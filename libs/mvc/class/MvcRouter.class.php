@@ -61,7 +61,7 @@
 				
 				$this->page_mvc_modules = [$instance];
 			}
-			
+
 			$this->send_http_head();
 			
 			if ($this->request_done()) {

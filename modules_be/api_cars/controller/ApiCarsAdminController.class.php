@@ -4,6 +4,16 @@
 		/* Delete car */
 		public function handle_delete() : bool {
 			$cid = $_GET['id'] ?? null;
+			
+			if ($cid === null) {
+				echo json_encode([
+					'ok' => false,
+					'err' => 'No id to delete'
+				]);
+				
+				return true;
+			}
+			
 			$cm = CarsModel::get_instance();
 			$cm->delete_car($cid);
 			

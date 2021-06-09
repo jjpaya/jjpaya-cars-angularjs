@@ -6,9 +6,14 @@
 			$this->context = $e;
 		}
 		
-		public function handle_get_http_head() : bool {
+		public function send_special() : bool {
 			http_response_code(503);
-			return false;
+			echo json_encode([
+				'ok' => false,
+				'err' => $this->context->getMessage()
+			]);
+			
+			return true;
 		}
 		
 		public function handle_get_body() : bool {
