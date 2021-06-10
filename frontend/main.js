@@ -1,8 +1,12 @@
 import AppConstants from './config/constants.js';
+import Credentials from './config/credentials.js';
 
 import './modules/services/auth/index.js';
 import './modules/services/cars/index.js';
 import './modules/services/contact/index.js';
+import './modules/services/related/index.js';
+
+import './modules/directives/stringToNum/stringToNum.js';
 
 import './modules/components/footer/index.js';
 import './modules/components/header/index.js';
@@ -12,6 +16,7 @@ import './modules/pages/contact/index.js';
 import './modules/pages/verify/index.js';
 import './modules/pages/resetpw/index.js';
 import './modules/pages/cars/index.js';
+import './modules/pages/shop/index.js';
 import './modules/pages/err404/index.js';
 
 const requires = [
@@ -22,6 +27,9 @@ const requires = [
 	'jjcars.serv.auth',
 	'jjcars.serv.cars',
 	'jjcars.serv.contact',
+	'jjcars.serv.related',
+	
+	'jjcars.directive.strtonum',
 	
 	'jjcars.comp.footer',
 	'jjcars.comp.header',
@@ -31,24 +39,18 @@ const requires = [
 	'jjcars.page.verify',
 	'jjcars.page.resetpw',
 	'jjcars.page.cars',
+	'jjcars.page.shop',
 	'jjcars.page.err404'
 ];
 
 var jjcars = angular.module('jjcars', requires);
 
 jjcars.constant('AppConstants', AppConstants);
+jjcars.constant('Credentials', Credentials);
 /*jjcars.config(['$routeProvider', $routeProvider => {
 	$routeProvider
 			
-			.when('/shop', { // $routeParams
-				
-			})
-
 			.when('/shop/view/:carId', {
-				
-			})
-			
-			.when('/cart', {
 				
 			})
 			

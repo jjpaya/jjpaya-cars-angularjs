@@ -1,4 +1,6 @@
 .c9
 private/credentials.json
+backend/private/credentials.json
+frontend/config/credentials.js
 test.php
 #data/*

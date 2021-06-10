@@ -24,7 +24,7 @@
 	
 	<div class="search">
 		<form name="searchf" ng-submit="$ctrl.carSearch($ctrl.searchQuery)">
-			<input ng-model="$ctrl.searchQuery" ng-change="$ctrl.updateCarSearchSuggestions()" type="text" name="query" placeholder="Search cars..." required>
+			<input ng-model="$ctrl.searchQuery" ng-change="$ctrl.updateCarSearchSuggestions()" type="text" name="query" placeholder="Search cars...">
 			<input type="submit" value="&#128269;">
 		</form>
 		<div class="h-autocomplete" ng-show="$ctrl.carSuggestions.length">

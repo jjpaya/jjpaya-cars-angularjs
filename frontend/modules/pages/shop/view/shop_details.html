@@ -1,0 +1,31 @@
+<div class="page shop">
+	<div class="ng-hide">
+		<link rel="stylesheet" href="/modules/pages/shop/view/css/shop.css" type="text/css">
+		<link rel="stylesheet" href="/modules/pages/shop/view/css/shop_details.css" type="text/css">
+	</div>
+	<div class="details-view">
+		<div class="card det-head">
+			<a href="javascript:void(0)" ng-click="$ctrl.goBack()">&#129044; Back</a>
+			<h2 class="item-name">{{$ctrl.car.brand_name}} {{$ctrl.car.model}}</h2>
+			<span class="item-price">{{$ctrl.car.price_eur_cent / 100 | currency:'€'}}</span>
+		</div>
+		<div class="card item-imgs carousel-track">
+			<img ng-show="$ctrl.car.imgs.length === 0" src="{{$ctrl.viewPath}}/img/placeholder.png">
+			<img ng-repeat="img in $ctrl.car.imgs track by img.img_id" src="{{img.path}}">
+		</div>
+		<div class="card item-desc">
+			<div ng-repeat="(key, val) in $ctrl.car">
+				<b>{{$ctrl.capitalize(key)}}: </b>
+				<span>{{val}}</span>
+			</div>
+		</div>
+		<div class="card related carousel-track">
+			<div class="book" ng-repeat="book in $ctrl.related.items">
+				<a href="{{book.volumeInfo.infoLink}}">
+					<img ng-show="book.volumeInfo.imageLinks" src="{{book.volumeInfo.imageLinks.smallThumbnail}}">
+					<div class="book-title">{{book.volumeInfo.title}}</div>
+				</a>
+			</div>
+		</div>
+	</div>
+</div>

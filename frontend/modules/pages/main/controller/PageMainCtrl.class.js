@@ -1,7 +1,8 @@
 export default class PageMainCtrl {
-	constructor(Cars, $window, $scope, carouselCarData, scrollerBrandData) {
+	constructor(Cars, $window, $scope, $location, carouselCarData, scrollerBrandData) {
 		this._Cars = Cars;
 		this._$scope = $scope;
+		this._$loc = $location;
 		
 		this.carouselCarData = carouselCarData;
 		this.scrollerBrandData = scrollerBrandData;
@@ -24,7 +25,7 @@ export default class PageMainCtrl {
 	}
 	
 	brandClick(brand) {
-		console.log(brand);
+		this._$loc.url('/shop?brand_id=' + brand.brand_id);
 	}
 	
 	getCarImgUrl(car) {
@@ -32,7 +33,7 @@ export default class PageMainCtrl {
 	}
 	
 	carClick(car) {
-		console.log(car);
+		this._$loc.url('/shop/view/' + car.car_id);
 	}
 	
 	async loadMoreBrandsScroller() {

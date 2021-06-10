@@ -36,6 +36,14 @@ export default class CarsService {
 		})).data;
 	}
 	
+	async getCarDetails(id) {
+		return (await this._$http({
+			method: 'GET',
+			url: this.routes.details,
+			params: {id}
+		}).catch(e => null)).data;
+	}
+	
 	async getTotalCars(options = {}) {
 		return (await this._$http({
 			method: 'GET',

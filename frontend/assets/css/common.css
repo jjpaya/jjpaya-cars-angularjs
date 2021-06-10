@@ -71,3 +71,8 @@ div[ng-view] {
 .table > div > div {
 	display: table-cell;
 }
+
+.carousel-track {
+	display: flex;
+	overflow-x: auto;
+}

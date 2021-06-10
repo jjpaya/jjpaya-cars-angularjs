@@ -6,6 +6,7 @@ pMainMod.controller('PageMainCtrl', [
 	'Cars',
 	'$window',
 	'$scope',
+	'$location',
 	'carouselCarData',
 	'scrollerBrandData',
 	PageMainCtrl

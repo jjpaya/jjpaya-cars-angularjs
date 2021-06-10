@@ -1,0 +1,86 @@
+.shop-view .gmaps {
+	height: 200px;
+}
+
+.listing, .filters {
+	text-align: center;
+}
+
+.filters b {
+	display: block;
+}
+
+.filters > div {
+	position: sticky;
+	top: 10px;
+}
+
+.filters input[type="text"], .filters input[type="number"], .filters select {
+	width: 30vw;
+    max-width: 205px;
+    min-width: 75px;
+	box-sizing: border-box;
+}
+
+/*.filters > * {
+	width: 100%;
+}*/
+
+.l-item {
+	text-align: initial;
+	width: 100%;
+	background-position: center;
+	background-size: cover;
+	/* background-repeat: no-repeat; */
+	height: 25vh;
+	border: 1px solid #777;
+	box-shadow: inset 0px 0px 2px 0px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	display: flex;
+	background-color: #DDD;
+	margin-bottom: 5px;
+}
+
+.l-item:not(:active):hover {
+	opacity: 0.9;
+}
+
+.l-item > .c-img {
+	margin: 5px;
+	width: 18vw;
+    background-size: cover;
+    background-position: center;
+}
+
+.l-item > div:not(.c-img) {
+	flex-grow: 1;
+	margin-right: 5px;
+}
+
+.view-footer {
+    display: flex;
+    justify-content: center;
+}
+
+.page-btn {
+	padding: 4px 8px;
+	border: 1px solid #777;
+	box-shadow: inset 0px 0px 2px 0px;
+	border-radius: 4px;
+	box-sizing: border-box;
+	background-color: #DDD;
+	cursor: pointer;
+}
+
+.page-btn:hover {
+	opacity: 0.8;
+}
+
+.page-btn.active {
+	background-color: #CCF;
+}
+
+.page-btn + .page-btn {
+	margin-left: 5px;
+}

@@ -1,11 +1,13 @@
 export default class HeaderCtrl {
-	constructor(AppConstants, Auth, Cars, $scope, $location) {
+	constructor(AppConstants, Auth, Cars, $scope, $location, $route, $window) {
 		this.pageBrand = AppConstants.pageBrand;
 		this.user = Auth.currentUser;
 		this._Auth = Auth;
 		this._Cars = Cars;
 		this._$loc = $location;
 		this._$scope = $scope;
+		this._$route = $route;
+		this._$win = $window;
 
 		this.curModal = null;
 		this.loginForm = {};
@@ -66,9 +68,20 @@ export default class HeaderCtrl {
 	}
 	
 	carSearch(query) {
-		console.log(query);
 		this.searchQuery = query;
 		this.carSuggestions = [];
+		if (!this.searchQuery) {
+			this.searchQuery = undefined;
+		}
+		
+		if (this._$loc.path() == '/shop') {
+			this._$route.updateParams({containing: this.searchQuery});
+		} else {
+			this._$loc.url(
+				this.searchQuery !== undefined
+				? '/shop?containing=' + this._$win.encodeURIComponent(this.searchQuery)
+				: '/shop');
+		}
 	}
 	
 	async loginLocal() {
