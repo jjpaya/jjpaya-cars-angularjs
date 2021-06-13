@@ -76,3 +76,11 @@ div[ng-view] {
 	display: flex;
 	overflow-x: auto;
 }
+
+jjc-favorite-btn .favved:before {
+	color: red;
+}
+
+jjc-favorite-btn button:before {
+	content: '\002665';
+}

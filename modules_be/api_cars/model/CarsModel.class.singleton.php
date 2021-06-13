@@ -235,8 +235,13 @@ EOQ;
 		
 		
 		public function get_car(int $cid) : ?array {
-			return $this->db->pquery('SELECT * FROM cars WHERE car_id = ?', $cid)
-					->fetch_assoc() ?? null;
+			return $this->db->pquery(<<<'EOQ'
+				SELECT c.*, br.name AS brand_name
+				FROM cars AS c
+				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
+				WHERE car_id = ?
+EOQ
+			, $cid)->fetch_assoc() ?? null;
 		}
 		
 		public function increase_car_views(int $cid) : void {

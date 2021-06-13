@@ -5,11 +5,13 @@ import './modules/services/auth/index.js';
 import './modules/services/cars/index.js';
 import './modules/services/contact/index.js';
 import './modules/services/related/index.js';
+import './modules/services/starred/index.js';
 
 import './modules/directives/stringToNum/stringToNum.js';
 
 import './modules/components/footer/index.js';
 import './modules/components/header/index.js';
+import './modules/components/favorite-btn/index.js';
 
 import './modules/pages/main/index.js';
 import './modules/pages/contact/index.js';
@@ -28,11 +30,13 @@ const requires = [
 	'jjcars.serv.cars',
 	'jjcars.serv.contact',
 	'jjcars.serv.related',
+	'jjcars.serv.starred',
 	
 	'jjcars.directive.strtonum',
 	
 	'jjcars.comp.footer',
 	'jjcars.comp.header',
+	'jjcars.comp.favorite-btn',
 	
 	'jjcars.page.main',
 	'jjcars.page.contact',
@@ -49,10 +53,6 @@ jjcars.constant('AppConstants', AppConstants);
 jjcars.constant('Credentials', Credentials);
 /*jjcars.config(['$routeProvider', $routeProvider => {
 	$routeProvider
-			
-			.when('/shop/view/:carId', {
-				
-			})
 			
 			.when('/checkout', {
 				
