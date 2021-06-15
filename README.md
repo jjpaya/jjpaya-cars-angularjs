@@ -11,6 +11,7 @@ Built with PHP 8, HTML/CSS/AngularJS 1.5 & SQL
 * Starred items
 * Shop cart
 * Logging in, registering, avatars, mail verification & password reset mail
+* Verified social login using firebase
 * Admin controls
 
 ## Installation
@@ -28,6 +29,9 @@ You also need to create a credentials.json file on `private/` with the following
 	},
 	"api": {
 		"google": "google_api_key_for_google_books_and_google_maps_js_api",
+		"firebase": {
+			"apiKey": "Your firebase configuration goes here"
+		},
 		"mailjet": {
 			"email": "sender_email_for_web_mails",
 			"user": "user_mailjet_token",

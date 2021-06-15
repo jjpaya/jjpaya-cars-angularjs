@@ -1,9 +1,0 @@
-.ha-popup > div input:not([type="checkbox"]) {
-	width: 100%;
-	box-sizing: border-box;
-}
-
-.head-auth input[type="submit"], .head-auth form > button {
-    width: 100%;
-    margin: 5px 0;
-}

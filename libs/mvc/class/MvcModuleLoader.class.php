@@ -11,7 +11,7 @@
 					?? (self::is_api_request() ? ['modules_be'] : ['modules_fe']);
 		}
 		
-		public static function set_module_directory(array $new_dirs) : void {
+		public static function set_module_directories(array $new_dirs) : void {
 			self::$mod_directories = $new_dirs;
 		}
 		
