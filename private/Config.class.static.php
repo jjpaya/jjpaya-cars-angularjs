@@ -3,6 +3,7 @@
 	require_once 'libs/db/inc.php';
 	
 	class Config {
+		private static ?string $firebase_api_key;
 		private static ?string $google_api_key;
 		private static ?string $jwt_secret;
 		private static ?string $mailjet_email;
@@ -12,6 +13,7 @@
 		public static function load_config(string $file) : void {
 			$config = read_json($file);
 			
+			Config::$firebase_api_key = $config['api']['firebase']['apiKey'] ?? null;
 			Config::$google_api_key = $config['api']['google'] ?? null;
 			Config::$jwt_secret = $config['jwt']['secret'] ?? null;
 			Config::$mailjet_email = $config['api']['mailjet']['email'] ?? null;
@@ -23,6 +25,10 @@
 		
 		public static function get_google_api_key() : string {
 			return Config::$google_api_key;
+		}
+		
+		public static function get_firebase_api_key() : string {
+			return Config::$firebase_api_key;
 		}
 		
 		public static function get_jwt_secret() : string {

@@ -59,14 +59,24 @@ EOQ
 EOQ
 			);
 
-			/*$this->db->pquery(<<<'EOQ'
+			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS links_google (
 					uid BIGINT NOT NULL PRIMARY KEY,
+					external_uid VARCHAR(64) NOT NULL UNIQUE,
 					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
 				)
 EOQ
-			);*/
+			);
 
+			$this->db->pquery(<<<'EOQ'
+				CREATE TABLE IF NOT EXISTS links_github (
+					uid BIGINT NOT NULL PRIMARY KEY,
+					external_uid VARCHAR(64) NOT NULL UNIQUE,
+					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
+				)
+EOQ
+			);
+			
 			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS pass_reset_tokens (
 					target_uid BIGINT NOT NULL PRIMARY KEY,
@@ -100,6 +110,84 @@ EOQ
 				FROM users AS u
 				INNER JOIN links_local AS l ON l.uid = u.uid
 				WHERE _username IN (u.username, l.email)
+EOQ
+			);
+			
+			$this->db->squery(<<<'EOQ'
+				CREATE PROCEDURE IF NOT EXISTS get_or_create_github_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255))
+				BEGIN
+					DECLARE inserted_uid BIGINT DEFAULT 0;
+					
+					DECLARE EXIT HANDLER FOR SQLEXCEPTION
+					BEGIN
+						ROLLBACK;
+						RESIGNAL;
+					END;
+					
+					SELECT u.uid INTO inserted_uid
+						FROM users AS u
+						INNER JOIN links_github AS l ON u.uid = l.uid
+						WHERE l.external_uid = _external_uid;
+						
+					IF inserted_uid = 0 THEN
+						START TRANSACTION;
+					
+						INSERT INTO users (username, img)
+							VALUES (_username, _img);
+	
+						SELECT uid INTO inserted_uid
+							FROM users
+							WHERE username = _username;
+						
+						INSERT INTO links_github (uid, external_uid)
+							VALUES (inserted_uid, _external_uid);
+						
+						COMMIT;
+					END IF;
+					
+					SELECT *
+						FROM users
+						WHERE uid = inserted_uid;
+				END
+EOQ
+			);
+			
+			$this->db->squery(<<<'EOQ'
+				CREATE PROCEDURE IF NOT EXISTS get_or_create_google_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255))
+				BEGIN
+					DECLARE inserted_uid BIGINT DEFAULT 0;
+					
+					DECLARE EXIT HANDLER FOR SQLEXCEPTION
+					BEGIN
+						ROLLBACK;
+						RESIGNAL;
+					END;
+					
+					SELECT u.uid INTO inserted_uid
+						FROM users AS u
+						INNER JOIN links_google AS l ON u.uid = l.uid
+						WHERE l.external_uid = _external_uid;
+						
+					IF inserted_uid = 0 THEN
+						START TRANSACTION;
+					
+						INSERT INTO users (username, img)
+							VALUES (_username, _img);
+	
+						SELECT uid INTO inserted_uid
+							FROM users
+							WHERE username = _username;
+						
+						INSERT INTO links_google (uid, external_uid)
+							VALUES (inserted_uid, _external_uid);
+						
+						COMMIT;
+					END IF;
+					
+					SELECT *
+						FROM users
+						WHERE uid = inserted_uid;
+				END
 EOQ
 			);
 			
@@ -303,6 +391,20 @@ EOQ
 				CALL get_local_account_info(?)
 EOQ
 			, $username)->fetch_assoc() ?? null;
+		}
+		
+		public function get_or_create_github_account(string $external_uid, string $username, string $img) : ?array {
+			return $this->db->pquery(<<<'EOQ'
+				CALL get_or_create_github_account(?, ?, ?)
+EOQ
+			, $external_uid, $username, $img)->fetch_assoc() ?? null;
+		}
+
+		public function get_or_create_google_account(string $external_uid, string $username, string $img) : ?array {
+			return $this->db->pquery(<<<'EOQ'
+				CALL get_or_create_google_account(?, ?, ?)
+EOQ
+			, $external_uid, $username, $img)->fetch_assoc() ?? null;
 		}
 		
 		public function register_local_account(string $username, string $email, string $hashed_pass) : mysqli_result|bool {

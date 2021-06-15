@@ -45,7 +45,10 @@
 					<h4>{{$index + 1}}. {{car.brand_name}} {{car.model}} ({{car.price_eur_cent / 100 | currency:'€'}})</h4>
 					<hr>
 					<span>{{car.description}}, {{car.views}} view(s)</span>
-					<jjc-favorite-btn car-obj="car"></jjc-favorite-btn>
+					<div>
+						<jjc-favorite-btn car-obj="car"></jjc-favorite-btn>
+						<jjc-add-to-cart-btn car-obj="car"></jjc-add-to-cart-btn>
+					</div>
 				</div>
 			</div>
 		</div>

@@ -9,6 +9,7 @@
 			<h2 class="item-name">{{$ctrl.car.brand_name}} {{$ctrl.car.model}}</h2>
 			<span class="item-price">{{$ctrl.car.price_eur_cent / 100 | currency:'€'}}</span>
 			<jjc-favorite-btn car-obj="$ctrl.car"></jjc-favorite-btn>
+			<jjc-add-to-cart-btn car-obj="$ctrl.car"></jjc-add-to-cart-btn>
 		</div>
 		<div class="card item-imgs carousel-track">
 			<img ng-show="$ctrl.car.imgs.length === 0" src="{{$ctrl.viewPath}}/img/placeholder.png">

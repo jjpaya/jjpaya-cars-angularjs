@@ -3,6 +3,7 @@ import Credentials from './config/credentials.js';
 
 import './modules/services/auth/index.js';
 import './modules/services/cars/index.js';
+import './modules/services/cart/index.js';
 import './modules/services/contact/index.js';
 import './modules/services/related/index.js';
 import './modules/services/starred/index.js';
@@ -12,6 +13,8 @@ import './modules/directives/stringToNum/stringToNum.js';
 import './modules/components/footer/index.js';
 import './modules/components/header/index.js';
 import './modules/components/favorite-btn/index.js';
+import './modules/components/add-to-cart-btn/index.js';
+import './modules/components/cart-popup-btn/index.js';
 
 import './modules/pages/main/index.js';
 import './modules/pages/contact/index.js';
@@ -28,6 +31,7 @@ const requires = [
 	
 	'jjcars.serv.auth',
 	'jjcars.serv.cars',
+	'jjcars.serv.cart',
 	'jjcars.serv.contact',
 	'jjcars.serv.related',
 	'jjcars.serv.starred',
@@ -37,6 +41,8 @@ const requires = [
 	'jjcars.comp.footer',
 	'jjcars.comp.header',
 	'jjcars.comp.favorite-btn',
+	'jjcars.comp.add-to-cart-btn',
+	'jjcars.comp.cart-popup-btn',
 	
 	'jjcars.page.main',
 	'jjcars.page.contact',
@@ -60,8 +66,14 @@ jjcars.constant('Credentials', Credentials);
 	
 }]);*/
 
-jjcars.run(['AppConstants', '$rootScope', '$location', 'toastr',
-		(AppConstants, $rootScope, $location, toastr) => {
+jjcars.run(['AppConstants', 'Credentials', '$rootScope', '$location', 'toastr',
+		(AppConstants, Credentials, $rootScope, $location, toastr) => {
+	
+	// Initialize Firebase
+	firebase.initializeApp(Credentials.api.firebase);
+	firebase.analytics();
+	firebase.auth();
+	
 	// Helper method for setting the page's title
 	$rootScope.setPageTitle = (title) => {
 		$rootScope.title = '';

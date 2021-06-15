@@ -1,0 +1,41 @@
+<button ng-click="$ctrl.modal('cart')" title="Cart">&#128722; ({{$ctrl.items.length}})</button>
+<div class="popup delete-popup" ng-show="$ctrl.curModal == 'cart'">
+	<div>
+		<h3>Cart items ({{$ctrl.items.length}}):</h3>
+		<hr>
+		<div ng-show="$ctrl.items.length == 0"><b>No items in cart!</b></div>
+		<table ng-show="$ctrl.items.length != 0">
+			<tr>
+				<th></th>
+				<th>Name</th>
+				<th>Quantity</th>
+				<th>Price</th>
+				<th></th>
+			</tr>
+			<tr class="cart-item" ng-repeat="car in $ctrl.items track by car.car_id">
+				<td><img style="max-width: 50px;" src="{{car.img}}"></td>
+				<td>{{car.name}}</td>
+				<td>
+					<button ng-disabled="car.qty == 1" ng-click="$ctrl.addQty(car, -1)">-</button>
+					<span>{{car.qty}}</span>
+					<button ng-click="$ctrl.addQty(car, 1)">+</button>
+				</td>
+				<td>{{car.price / 100 * car.qty | currency:'€'}}</td>
+				<td>
+					<button ng-click="$ctrl.removeCar(car)" title="Remove">&#10007;</button>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="3">Total:</th>
+				<td>{{$ctrl.getTotal() / 100 | currency:'€'}}</td>
+			</tr>
+		</table>
+		<hr>
+		<div style="text-align: center;">
+			<button ng-click="$ctrl.modal(null)">Close</button>
+			<button ng-click="$ctrl.clearCart()">Clear cart</button>
+			<button ng-disabled="$ctrl.items.length == 0" ng-click="$ctrl.goToCheckout()">Checkout</button>
+		</div>
+	</div>
+</div>
+<a href="javascript:void(0)" ng-click="$ctrl.modal(null)" ng-show="$ctrl.curModal" class="popup-dismisser"></a>

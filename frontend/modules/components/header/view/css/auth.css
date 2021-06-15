@@ -13,7 +13,7 @@
 	align-items: center;
 }
 
-.head-auth button {
+.head-auth button, jjc-cart-popup-btn button {
 	height: fit-content;
 	min-height: 22px;
 }
@@ -50,3 +50,13 @@ div.profile-popup hr {
 div.profile-popup img {
 	max-width: 40%;
 }
+
+.social-login {
+	text-align: center;
+}
+
+.social-login button img {
+    max-height: 16pt;
+    vertical-align: top;
+}
+

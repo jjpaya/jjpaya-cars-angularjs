@@ -28,7 +28,7 @@ export default class FavoriteBtnCtrl {
 	}*/
 	
 	getDisabled() {
-		return this.btnState === this.STATE.LOADING || this.toggling;
+		return this.btnState === this.STATE.LOADING || this.toggling || !this._Auth.currentUser;
 	}
 	
 	getClass() {

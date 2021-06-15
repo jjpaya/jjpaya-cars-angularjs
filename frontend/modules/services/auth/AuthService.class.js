@@ -8,7 +8,9 @@ export default class AuthService {
 		
 		this.routes = {
 			get_user: '/api/auth/info',
-			login_local: '/api/auth/login',
+			login_local: '/api/auth/login/local',
+			login_google: '/api/auth/login/google',
+			login_github: '/api/auth/login/github',
 			register_local: '/api/auth/register',
 			logout: '/api/auth/logout',
 			recover_pass: '/api/auth/recover',
@@ -19,7 +21,7 @@ export default class AuthService {
 	tryLoadStoredUserInfo() {
 		var w = this._$win;
 		try {
-			this.currentUser = w.JSON.parse(w.atob(w.localStorage.getItem('jwtuser').split('.')[1]));
+			this.currentUser = w.JSON.parse(w.atob(w.localStorage.getItem('jwtuser').split('.')[1].replace(/_/g, '/')));
 			this.sessionType = this.currentUser.stype;
 		} catch (e) {
 			this.sessionType = 'none';
@@ -47,6 +49,40 @@ export default class AuthService {
 			method: 'POST',
 			url: this.routes.login_local,
 			data: {username, pass, persist}
+		}).catch(r => r)).data;
+		
+		if (!res.ok) {
+			throw new Error(res.err);
+		}
+		
+		localStorage.setItem('jwtuser', res.data);
+		this.tryLoadStoredUserInfo();
+		
+		return res;
+	}
+
+	async loginGoogle(idToken) {
+		var res = (await this._$http({
+			method: 'POST',
+			url: this.routes.login_google,
+			data: {idToken}
+		}).catch(r => r)).data;
+		
+		if (!res.ok) {
+			throw new Error(res.err);
+		}
+		
+		localStorage.setItem('jwtuser', res.data);
+		this.tryLoadStoredUserInfo();
+		
+		return res;
+	}
+
+	async loginGithub(idToken) {
+		var res = (await this._$http({
+			method: 'POST',
+			url: this.routes.login_github,
+			data: {idToken}
 		}).catch(r => r)).data;
 		
 		if (!res.ok) {

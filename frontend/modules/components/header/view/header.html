@@ -32,6 +32,8 @@
 		</div>
 	</div>
 	
+	<jjc-cart-popup-btn></jjc-cart-popup-btn>
+	
 	<div class="head-auth">
 		<button ng-click="$ctrl.modal('login')"    ng-show="!$ctrl.user">Login</button>
 		<button ng-click="$ctrl.modal('register')" ng-show="!$ctrl.user">Register</button>
@@ -53,6 +55,14 @@
 					<div ng-show="$ctrl.loginFailed" class="err"><b>{{$ctrl.loginFailed}}</b></div>
 					<div ng-show="!loginf.usrn.$pristine && !loginf.usrn.$valid" class="err"><b>Usernames can't have those characters!</b></div>
 				</form>
+				<div class="social-login">
+					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGithub()">
+						<img src="{{$ctrl.viewPath}}/img/ghub.png">
+					</button>
+					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGoogle()">
+						<img src="{{$ctrl.viewPath}}/img/goog.png">
+					</button>
+				</div>
 			</div>
 		</div>
 		<div class="ha-popup register-popup" ng-show="$ctrl.curModal == 'register'">

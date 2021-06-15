@@ -132,7 +132,7 @@ div.ha-popup.show {
 	display: block;
 }
 
-div.header .search {
+div.header .search, jjc-cart-popup-btn {
 	margin-right: 5px;
 }
 

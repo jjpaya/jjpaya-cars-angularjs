@@ -10,6 +10,7 @@ headerMod.component('jjcHeader', {
 		'$location',
 		'$route',
 		'$window',
+		'toastr',
 		HeaderCtrl
 	],
 	templateUrl: '/modules/components/header/view/header.html'

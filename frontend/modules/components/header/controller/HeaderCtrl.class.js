@@ -1,5 +1,5 @@
 export default class HeaderCtrl {
-	constructor(AppConstants, Auth, Cars, $scope, $location, $route, $window) {
+	constructor(AppConstants, Auth, Cars, $scope, $location, $route, $window, toastr) {
 		this.pageBrand = AppConstants.pageBrand;
 		this.user = Auth.currentUser;
 		this._Auth = Auth;
@@ -8,6 +8,10 @@ export default class HeaderCtrl {
 		this._$scope = $scope;
 		this._$route = $route;
 		this._$win = $window;
+		this._toastr = toastr;
+		
+		this.fbaseGoogle = new firebase.auth.GoogleAuthProvider();
+		this.fbaseGhub = new firebase.auth.GithubAuthProvider();
 
 		this.curModal = null;
 		this.loginForm = {};
@@ -82,6 +86,42 @@ export default class HeaderCtrl {
 				? '/shop?containing=' + this._$win.encodeURIComponent(this.searchQuery)
 				: '/shop');
 		}
+	}
+	
+	async loginGithub() {
+		this.requestInProgress = true;
+		
+		try {
+			var result = await firebase.auth().signInWithPopup(this.fbaseGhub);
+			var idToken = await result.user.getIdToken();
+			
+			await this._Auth.loginGithub(idToken);
+			this.modal(null);
+		} catch (e) {
+			this._toastr.error(e.message, 'Error while signing in to Github:');
+			console.log(e);
+		}
+		
+		this.requestInProgress = false;
+		this._$scope.$apply();
+	}
+	
+	async loginGoogle() {
+		this.requestInProgress = true;
+		
+		try {
+			var result = await firebase.auth().signInWithPopup(this.fbaseGoogle);
+			var idToken = await result.user.getIdToken();
+			
+			await this._Auth.loginGoogle(idToken);
+			this.modal(null);
+		} catch (e) {
+			this._toastr.error(e.message, 'Error while signing in to Google:');
+			console.log(e);
+		}
+		
+		this.requestInProgress = false;
+		this._$scope.$apply();
 	}
 	
 	async loginLocal() {
