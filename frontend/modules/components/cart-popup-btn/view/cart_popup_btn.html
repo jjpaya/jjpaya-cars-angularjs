@@ -13,7 +13,7 @@
 				<th></th>
 			</tr>
 			<tr class="cart-item" ng-repeat="car in $ctrl.items track by car.car_id">
-				<td><img style="max-width: 50px;" src="{{car.img}}"></td>
+				<td><img style="max-width: 50px;" ng-src="{{car.img}}"></td>
 				<td>{{car.name}}</td>
 				<td>
 					<button ng-disabled="car.qty == 1" ng-click="$ctrl.addQty(car, -1)">-</button>

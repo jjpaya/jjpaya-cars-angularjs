@@ -102,18 +102,18 @@
 				$data = $this->am->create_recovery_token_for($email);
 				
 				$mailer = new CurlMailjetMailer('JJCars');
-				$mailer->send_mail($data['user']['email'], 'Password recovery', preg_replace('/^\s*/', '', <<<EOM
-					Hello!
-					
-					You have requested a password recovery for {$data['user']['name']}.
-					Click on the following link to proceed with the change:
-					http://localhost:8080/#/resetpw/{$data['user']['uid']}/{$data['token']}
-					
-					If you didn't request this change you may safely ingore this email, the token expires in 6 hours.
-					
-					-- JJCars
+				$mailer->send_mail($data['user']['email'], 'Password recovery', <<<EOM
+Hello!
+
+You have requested a password recovery for {$data['user']['name']}.
+Click on the following link to proceed with the change:
+http://localhost:8080/#/resetpw/{$data['user']['uid']}/{$data['token']}
+
+If you didn't request this change you may safely ingore this email, the token expires in 6 hours.
+
+-- JJCars
 EOM
-				));
+				);
 				
 				echo json_encode([
 					'ok' => true

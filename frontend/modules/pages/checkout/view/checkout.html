@@ -1,0 +1,30 @@
+<div class="page">
+	<div class="card">
+		<h2>Checkout</h2>
+		<hr>
+		<p>Review the cart details below and click confirm to proceed with the checkout:</p>
+		
+		<table class="bordered mgauto">
+			<tr>
+				<th>Name</th>
+				<th>Price</th>
+				<th>Quantity</th>
+			</tr>
+			<tr ng-repeat="car in $ctrl.cart.items track by car.car_id">
+				<td>{{car.brand_name}} {{car.model}}</td>
+				<td>{{car.price_eur_cent / 100 | currency:'€'}}</td>
+				<td class="tcenter">{{car.qty}}</td>
+			</tr>
+			<tr>
+				<th colspan="2">Total:</th>
+				<td>{{$ctrl.cart.total / 100 | currency:'€'}}</td>
+			</tr>
+		</table>
+		
+		<div class="mgtop10px tcenter">
+		<button ng-click="$ctrl.checkout()" ng-disabled="$ctrl.getError() || $ctrl.checkoutOk">Proceed with checkout</button>
+		<div class="err" ng-show="$ctrl.getError()">{{$ctrl.getError()}}</div>
+		<div ng-show="$ctrl.checkoutOk">Order confirmed correctly! Your order ID: {{$ctrl.iid}}</div>
+		</div>
+	</div>
+</div>

@@ -12,6 +12,14 @@ export default class PageShopCtrl {
 		
 		this.brands = brands;
 		
+		this.currmarkers = [];
+		this.map = new google.maps.Map(document.querySelector('.shop-view .gmaps'), {
+			center: {lat: 40.416, lng: -3.703},
+			zoom: 4.75
+		});
+		
+		this.setupMarkers();
+		
 		$scope.$on('$routeUpdate', (event, current) => {
 			this.reloadData();
 		});
@@ -60,9 +68,41 @@ export default class PageShopCtrl {
 			this.updateUrlParams();
 		}
 		
+		this.currmarkers.forEach(m => m.setMap(null));
 		this.visibleCars = await C.getCars(this.currentFilters);
+		this.setupMarkers();
 		
 		this._$scope.$apply();
+	}
+	
+	setupMarkers() {
+		this.visibleCars.forEach((car, i) => {
+			if (!(car.lat && car.lon)) {
+				return;
+			}
+			
+			var pos = new google.maps.LatLng(car.lat, car.lon);
+			var marker = new google.maps.Marker({
+			    position: pos,
+			    title: car.brand_name + ' ' + car.model,
+			    label: (i + 1).toString()
+			});
+			
+			var infowindow = new google.maps.InfoWindow({
+				content:
+				`<div class="map-info">
+					<h4>${car.brand_name + ' ' + car.model}</h4>
+					<span>${car.description}, ${car.price_eur_cent / 100}€</span>
+				</div>`
+			});
+			
+			marker.addListener("click", ((iw, marker) => () => {
+				iw.open(this.map, marker);
+			})(infowindow, marker));
+			
+			this.currmarkers.push(marker);
+			marker.setMap(this.map);
+		});
 	}
 	
 	getCarImgUrl(car) {

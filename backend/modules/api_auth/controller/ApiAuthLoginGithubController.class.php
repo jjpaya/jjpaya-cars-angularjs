@@ -31,7 +31,7 @@
 			
 			$username = preg_replace('/@.*/', '', $user['email']);
 
-			$accdata = $am->get_or_create_github_account($user['localId'], $username, $user['photoUrl']);
+			$accdata = $am->get_or_create_github_account($user['localId'], $username, $user['photoUrl'], $user['email']);
 			
 			$jwt = new JWT(Config::get_jwt_secret());
 			$exptime = time() + 60 * 60 * 24 * 7;
@@ -39,7 +39,7 @@
 			$sesspload = $jwt->encode([
 				'sess_uid' => $accdata['uid'],
 				'persist' => true,
-				'stype' => 'google',
+				'stype' => 'github',
 				'exp' => $exptime
 			]);
 			
@@ -48,7 +48,7 @@
 				'username' => $accdata['username'],
 				'admin' => $accdata['is_admin'],
 				'img' => $accdata['img'],
-				'stype' => 'google',
+				'stype' => 'github',
 				'exp' => $exptime
 			]);
 			

@@ -31,7 +31,7 @@
 			
 			$username = preg_replace('/@.*/', '', $user['email']);
 
-			$accdata = $am->get_or_create_google_account($user['localId'], $username, $user['photoUrl']);
+			$accdata = $am->get_or_create_google_account($user['localId'], $username, $user['photoUrl'], $user['email']);
 			
 			$jwt = new JWT(Config::get_jwt_secret());
 			$exptime = time() + 60 * 60 * 24 * 7;

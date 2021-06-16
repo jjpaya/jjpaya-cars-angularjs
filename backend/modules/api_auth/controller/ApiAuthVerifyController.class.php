@@ -110,18 +110,18 @@
 				$data = $this->am->create_verification_token_for($uid);
 				
 				$mailer = new CurlMailjetMailer('JJCars');
-				$mailer->send_mail($data['user']['email'], 'Mail verification', preg_replace('/^\s*/', '', <<<EOM
-					Hello!
-					
-					You have requested to verify your email address on JJCars for {$data['user']['name']}.
-					Click on the following link to verify your account:
-					http://localhost:8080/#/verify/{$data['user']['uid']}/{$data['token']}
-					
-					If you didn't request the verification you may safely ingore this email, the token expires in 6 hours.
-					
-					-- JJCars
+				$mailer->send_mail($data['user']['email'], 'Mail verification', <<<EOM
+Hello!
+
+You have requested to verify your email address on JJCars for {$data['user']['name']}.
+Click on the following link to verify your account:
+http://localhost:8080/#/verify/{$data['user']['uid']}/{$data['token']}
+
+If you didn't request the verification you may safely ingore this email, the token expires in 6 hours.
+
+-- JJCars
 EOM
-				));
+				);
 				
 				echo json_encode([
 					'ok' => true,

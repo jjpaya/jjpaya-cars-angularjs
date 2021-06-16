@@ -31,6 +31,9 @@ pShopMod.config(['$routeProvider', $routeProvider => {
 		title: 'Shop',
 		reloadOnSearch: false,
 		resolve: {
+			gmapsLoader: ['$window', ($window) => {
+				return $window.mapLoader;
+			}],
 			initialCarsData: ['Cars', '$route', (Cars, $route) => {
 				return Cars.getCars($route.current.params);
 			}],

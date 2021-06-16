@@ -63,6 +63,8 @@ EOQ
 				CREATE TABLE IF NOT EXISTS links_google (
 					uid BIGINT NOT NULL PRIMARY KEY,
 					external_uid VARCHAR(64) NOT NULL UNIQUE,
+					email VARCHAR(256) NOT NULL,
+					
 					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
 				)
 EOQ
@@ -72,6 +74,8 @@ EOQ
 				CREATE TABLE IF NOT EXISTS links_github (
 					uid BIGINT NOT NULL PRIMARY KEY,
 					external_uid VARCHAR(64) NOT NULL UNIQUE,
+					email VARCHAR(256) NOT NULL,
+					
 					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
 				)
 EOQ
@@ -106,7 +110,7 @@ EOQ
 
 			$this->db->squery(<<<'EOQ'
 				CREATE PROCEDURE IF NOT EXISTS get_local_account_info(IN _username VARCHAR(30))
-				SELECT u.uid, u.username, u.is_admin, u.img, l.password, l.email_verified
+				SELECT u.uid, u.username, u.is_admin, u.img, l.password, l.email_verified, l.email
 				FROM users AS u
 				INNER JOIN links_local AS l ON l.uid = u.uid
 				WHERE _username IN (u.username, l.email)
@@ -114,7 +118,7 @@ EOQ
 			);
 			
 			$this->db->squery(<<<'EOQ'
-				CREATE PROCEDURE IF NOT EXISTS get_or_create_github_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255))
+				CREATE PROCEDURE IF NOT EXISTS get_or_create_github_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255), IN _email VARCHAR(256))
 				BEGIN
 					DECLARE inserted_uid BIGINT DEFAULT 0;
 					
@@ -139,8 +143,8 @@ EOQ
 							FROM users
 							WHERE username = _username;
 						
-						INSERT INTO links_github (uid, external_uid)
-							VALUES (inserted_uid, _external_uid);
+						INSERT INTO links_github (uid, external_uid, email)
+							VALUES (inserted_uid, _external_uid, _email);
 						
 						COMMIT;
 					END IF;
@@ -153,7 +157,7 @@ EOQ
 			);
 			
 			$this->db->squery(<<<'EOQ'
-				CREATE PROCEDURE IF NOT EXISTS get_or_create_google_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255))
+				CREATE PROCEDURE IF NOT EXISTS get_or_create_google_account(IN _external_uid VARCHAR(64), IN _username VARCHAR(30), IN _img VARCHAR(255), IN _email VARCHAR(256))
 				BEGIN
 					DECLARE inserted_uid BIGINT DEFAULT 0;
 					
@@ -178,8 +182,8 @@ EOQ
 							FROM users
 							WHERE username = _username;
 						
-						INSERT INTO links_google (uid, external_uid)
-							VALUES (inserted_uid, _external_uid);
+						INSERT INTO links_google (uid, external_uid, email)
+							VALUES (inserted_uid, _external_uid, _email);
 						
 						COMMIT;
 					END IF;
@@ -385,6 +389,24 @@ EOQ
 EOQ
 			, $uid)->fetch_assoc() ?? null;
 		}
+
+		public function get_google_acct_info(int $uid) : ?array {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT *, true AS email_verified
+				FROM links_google
+				WHERE uid = ?
+EOQ
+			, $uid)->fetch_assoc() ?? null;
+		}
+		
+		public function get_github_acct_info(int $uid) : ?array {
+			return $this->db->pquery(<<<'EOQ'
+				SELECT *, true AS email_verified
+				FROM links_github
+				WHERE uid = ?
+EOQ
+			, $uid)->fetch_assoc() ?? null;
+		}
 		
 		public function get_local_account_info(string $username) : ?array {
 			return $this->db->pquery(<<<'EOQ'
@@ -393,18 +415,18 @@ EOQ
 			, $username)->fetch_assoc() ?? null;
 		}
 		
-		public function get_or_create_github_account(string $external_uid, string $username, string $img) : ?array {
+		public function get_or_create_github_account(string $external_uid, string $username, string $img, string $email) : ?array {
 			return $this->db->pquery(<<<'EOQ'
-				CALL get_or_create_github_account(?, ?, ?)
+				CALL get_or_create_github_account(?, ?, ?, ?)
 EOQ
-			, $external_uid, $username, $img)->fetch_assoc() ?? null;
+			, $external_uid, $username, $img, $email)->fetch_assoc() ?? null;
 		}
 
-		public function get_or_create_google_account(string $external_uid, string $username, string $img) : ?array {
+		public function get_or_create_google_account(string $external_uid, string $username, string $img, string $email) : ?array {
 			return $this->db->pquery(<<<'EOQ'
-				CALL get_or_create_google_account(?, ?, ?)
+				CALL get_or_create_google_account(?, ?, ?, ?)
 EOQ
-			, $external_uid, $username, $img)->fetch_assoc() ?? null;
+			, $external_uid, $username, $img, $email)->fetch_assoc() ?? null;
 		}
 		
 		public function register_local_account(string $username, string $email, string $hashed_pass) : mysqli_result|bool {

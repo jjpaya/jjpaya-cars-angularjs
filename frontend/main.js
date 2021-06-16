@@ -22,6 +22,7 @@ import './modules/pages/verify/index.js';
 import './modules/pages/resetpw/index.js';
 import './modules/pages/cars/index.js';
 import './modules/pages/shop/index.js';
+import './modules/pages/checkout/index.js';
 import './modules/pages/err404/index.js';
 
 const requires = [
@@ -50,25 +51,28 @@ const requires = [
 	'jjcars.page.resetpw',
 	'jjcars.page.cars',
 	'jjcars.page.shop',
+	'jjcars.page.checkout',
 	'jjcars.page.err404'
 ];
+
+window.mapLoader = new Promise((res, rej) => {
+	window.initMap = res;
+});
 
 var jjcars = angular.module('jjcars', requires);
 
 jjcars.constant('AppConstants', AppConstants);
 jjcars.constant('Credentials', Credentials);
-/*jjcars.config(['$routeProvider', $routeProvider => {
-	$routeProvider
-			
-			.when('/checkout', {
-				
-			})
-	
-}]);*/
+jjcars.config(['$sceProvider', function($sceProvider) {
+	// quick fix to be able to load the gmaps js url
+	$sceProvider.enabled(false);
+}]);
 
 jjcars.run(['AppConstants', 'Credentials', '$rootScope', '$location', 'toastr',
 		(AppConstants, Credentials, $rootScope, $location, toastr) => {
 	
+	$rootScope.gmapsUrl = 'https://maps.googleapis.com/maps/api/js?callback=initMap&key=' + Credentials.api.google;
+
 	// Initialize Firebase
 	firebase.initializeApp(Credentials.api.firebase);
 	firebase.analytics();
@@ -101,6 +105,10 @@ jjcars.run(['AppConstants', 'Credentials', '$rootScope', '$location', 'toastr',
 
 			case 'noperms':
 				toastr.error('You must be an administrator to access that page!', 'Permission denied');
+				break;
+				
+			case 'noitems':
+				toastr.error('You can\'t checkout if you have no items in the cart!', 'No items');
 				break;
 				
 			default:

@@ -5,7 +5,7 @@
 		<link rel="stylesheet" href="/modules/components/header/view/css/auth.css" type="text/css" />
 	</div>
 	
-	<img src="{{$ctrl.viewPath}}/img/logo.png" title="{{$ctrl.pageBrand}}">
+	<img ng-src="{{$ctrl.viewPath}}/img/logo.png" title="{{$ctrl.pageBrand}}">
 	<nav>
 		<a href="#/main"    ng-class="$ctrl.currentp('main')">Main</a>
 		<a href="#/cars"    ng-class="$ctrl.currentp('cars')" ng-show="$ctrl.user.admin">Cars</a>
@@ -15,10 +15,10 @@
 	
 	<span class="lang">
 		<a data-tr-switch="es" href="javascript:void(0)" title="ES">
-			<img src="{{$ctrl.viewPath}}/img/es.png" alt="ES">
+			<img ng-src="{{$ctrl.viewPath}}/img/es.png" alt="ES">
 		</a>
 		<a data-tr-switch="en" href="javascript:void(0)" title="EN">
-			<img src="{{$ctrl.viewPath}}/img/en.png" alt="EN">
+			<img ng-src="{{$ctrl.viewPath}}/img/en.png" alt="EN">
 		</a>
 	</span>
 	
@@ -38,7 +38,7 @@
 		<button ng-click="$ctrl.modal('login')"    ng-show="!$ctrl.user">Login</button>
 		<button ng-click="$ctrl.modal('register')" ng-show="!$ctrl.user">Register</button>
 		<button ng-click="$ctrl.modal('profile')"  ng-show="$ctrl.user" title="{{$ctrl.user.username}}" class="profile-btn">
-			<img src="{{$ctrl.userAvatarImg}}" alt="Profile">
+			<img ng-src="{{$ctrl.userAvatarImg}}" alt="Profile">
 		</button>
 	
 		<div class="ha-popup login-popup" ng-show="$ctrl.curModal == 'login'">
@@ -57,10 +57,10 @@
 				</form>
 				<div class="social-login">
 					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGithub()">
-						<img src="{{$ctrl.viewPath}}/img/ghub.png">
+						<img ng-src="{{$ctrl.viewPath}}/img/ghub.png">
 					</button>
 					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGoogle()">
-						<img src="{{$ctrl.viewPath}}/img/goog.png">
+						<img ng-src="{{$ctrl.viewPath}}/img/goog.png">
 					</button>
 				</div>
 			</div>
@@ -99,7 +99,7 @@
 		</div>
 		<div class="ha-popup profile-popup" ng-show="$ctrl.curModal == 'profile'">
 			<div>
-				<img src="{{$ctrl.userAvatarImg}}" alt="Profile">
+				<img ng-src="{{$ctrl.userAvatarImg}}" alt="Profile">
 				<div>
 					<span>{{$ctrl.user.username}}</span>
 					<hr>

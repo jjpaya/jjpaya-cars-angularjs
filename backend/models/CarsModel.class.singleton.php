@@ -33,15 +33,6 @@
 EOQ
 			);
 			
-			/*$this->db->pquery(<<<'EOQ'
-				CREATE TABLE IF NOT EXISTS car_tags (
-					tag_id BIGINT UNSIGNED,
-					model_id SERIAL,
-					name VARCHAR(24) NOT NULL CHECK (name REGEXP '^[a-z0-9 ]+$')
-				)
-EOQ
-			);*/
-			
 			$this->db->pquery(<<<'EOQ'
 				CREATE TABLE IF NOT EXISTS cars (
 					car_id SERIAL PRIMARY KEY,
@@ -85,6 +76,34 @@ EOQ
 					PRIMARY KEY(car_id, uid),
 					FOREIGN KEY(car_id) REFERENCES cars (car_id) ON DELETE CASCADE,
 					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE CASCADE
+				)
+EOQ
+			);
+			
+			
+			
+			$this->db->pquery(<<<'EOQ'
+				CREATE TABLE IF NOT EXISTS invoices (
+					invoice_id SERIAL PRIMARY KEY,
+					uid BIGINT NOT NULL,
+					created DATE NOT NULL DEFAULT CURDATE(),
+					
+					FOREIGN KEY(uid) REFERENCES users (uid) ON DELETE NO ACTION
+				)
+EOQ
+			);
+			
+			$this->db->pquery(<<<'EOQ'
+				CREATE TABLE IF NOT EXISTS invoice_lines (
+					invoice_id BIGINT UNSIGNED,
+					car_id BIGINT UNSIGNED,
+					line_id SERIAL,
+					price_eur_cent INT,
+					qty INT NOT NULL,
+
+					PRIMARY KEY(invoice_id, car_id),
+					FOREIGN KEY(invoice_id) REFERENCES invoices (invoice_id) ON DELETE CASCADE,
+					FOREIGN KEY(car_id) REFERENCES cars (car_id) ON DELETE NO ACTION
 				)
 EOQ
 			);
@@ -158,6 +177,55 @@ EOQ
 				ORDER BY car_id DESC
 EOQ
 			);
+		}
+		
+		public function get_details_of(array $car_ids) : array {
+			$str = implode(',', $car_ids);
+			
+			return $this->db->pquery(<<<EOQ
+				SELECT c.*, br.name AS brand_name
+				FROM cars AS c
+				INNER JOIN car_brands AS br ON c.brand_id = br.brand_id
+				WHERE c.car_id IN ({$str})
+				ORDER BY car_id DESC
+EOQ
+			)->fetch_all(MYSQLI_ASSOC) ?? array();
+		}
+		
+		public function checkout(int $uid, array $cart) : int {
+			$this->db->begin_transaction(MYSQLI_TRANS_START_READ_WRITE);
+			
+			try {
+				$this->db->pquery(<<<EOQ
+					INSERT INTO invoices (uid)
+					VALUES (?)
+EOQ
+				, $uid);
+				
+				$iid = $this->db->pquery('SELECT LAST_INSERT_ID()')->fetch_array()[0];
+				$insert_str = implode(',', array_map(fn($i) => "({$iid},{$i[0]},{$i[1]})", $cart));
+			
+				$this->db->pquery(<<<EOQ
+					INSERT INTO invoice_lines (invoice_id, car_id, qty)
+					VALUES {$insert_str}
+EOQ
+				);
+			
+				$this->db->pquery(<<<EOQ
+					UPDATE invoice_lines AS il
+					INNER JOIN cars AS c ON c.car_id = il.car_id
+					SET il.price_eur_cent = c.price_eur_cent
+					WHERE il.invoice_id = ?
+EOQ
+				, $iid);
+				
+				$this->db->commit();
+				return $iid;
+				
+			} catch (Exception $e) {
+				$this->db->rollback();
+				throw $e;
+			}
 		}
 		
 		public function find_cars(string $containing, int $limit = 10) : mysqli_result {

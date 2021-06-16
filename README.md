@@ -17,9 +17,9 @@ Built with PHP 8, HTML/CSS/AngularJS 1.5 & SQL
 ## Installation
 
 You will need nginx, PHP 8.0, and the curl & mysql php plugins.
-Sample config file for nginx can be found on `private/setup/nginx-config` along with a sample database.
+Sample config file for nginx can be found on `backend/private/setup/nginx-config` along with a sample database.
 
-You also need to create a credentials.json file on `private/` with the following format:
+You also need to create a credentials.json file on `backend/private/` with the following format:
 ```json
 {
 	"db": {
@@ -42,4 +42,16 @@ You also need to create a credentials.json file on `private/` with the following
 		"secret": "jwt_secret_key"
 	}
 }
+```
+
+The frontend also needs a credentials file in `frontend/config/credentials.js`:
+```js
+export default {
+	api: {
+		google: 'Google api key goes here',
+		firebase: {
+			apiKey: "Firebase configuration goes here"
+		}
+	}
+};
 ```

@@ -84,3 +84,19 @@ jjc-favorite-btn .favved:before {
 jjc-favorite-btn button:before {
 	content: '\002665';
 }
+
+.mgtop10px {
+	margin-top: 10px;
+}
+
+.mgauto {
+	margin: auto;
+}
+
+table.bordered, table.bordered tr, table.bordered td, table.bordered th {
+	border: 1px solid #000;
+}
+
+.tcenter {
+	text-align: center;
+}

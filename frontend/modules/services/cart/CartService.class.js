@@ -10,12 +10,13 @@ export default class CartService {
 		
 		this.items = [];
 		
+		console.log(this);
+		
 		try {
 			this.items = JSON.parse($window.localStorage.getItem('cart'));
 			if (!Array.isArray(this.items)) {
 				this.items = [];
 			}
-			
 		} catch (e) { }
 	}
 	
@@ -84,7 +85,7 @@ export default class CartService {
 		var data = (await this._$http({
 			method: 'GET',
 			url: this.routes.details,
-			params: {i: items}
+			params: {'i[]': items}
 		}).catch(e => e)).data;
 		
 		if (!data.ok) {
@@ -100,7 +101,7 @@ export default class CartService {
 		var data = (await this._$http({
 			method: 'POST',
 			url: this.routes.checkout,
-			data: this.items
+			data: this.items.map(i => `${i.car_id},${i.qty}`)
 		}).catch(e => e)).data;
 		
 		if (!data.ok) {
