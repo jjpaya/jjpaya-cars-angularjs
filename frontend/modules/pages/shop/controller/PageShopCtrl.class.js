@@ -13,10 +13,14 @@ export default class PageShopCtrl {
 		this.brands = brands;
 		
 		this.currmarkers = [];
-		this.map = new google.maps.Map(document.querySelector('.shop-view .gmaps'), {
-			center: {lat: 40.416, lng: -3.703},
-			zoom: 4.75
-		});
+		if ('google' in $window) {
+			this.map = new google.maps.Map(document.querySelector('.shop-view .gmaps'), {
+				center: {lat: 40.416, lng: -3.703},
+				zoom: 4.75
+			});
+		} else {
+			this.map = null;
+		}
 		
 		this.setupMarkers();
 		
@@ -76,6 +80,10 @@ export default class PageShopCtrl {
 	}
 	
 	setupMarkers() {
+		if (!this.map) {
+			return;
+		}
+		
 		this.visibleCars.forEach((car, i) => {
 			if (!(car.lat && car.lon)) {
 				return;

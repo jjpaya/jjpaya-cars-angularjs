@@ -22,7 +22,7 @@
 		<link rel="stylesheet" href="/lib/angular-toastr.min.css">
 		<script type="text/javascript" src="/lib/angular-toastr.tpls.min.js" defer></script>
 		
-		<script ng-src="{{gmapsUrl}}"></script>
+		<script ng-on-error="errorMap()" ng-src="{{gmapsUrl}}"></script>
 
 		<script type="module" src="/main.js" defer></script>
 	</head>

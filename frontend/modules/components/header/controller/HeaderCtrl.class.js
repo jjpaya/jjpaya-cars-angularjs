@@ -10,8 +10,13 @@ export default class HeaderCtrl {
 		this._$win = $window;
 		this._toastr = toastr;
 		
-		this.fbaseGoogle = new firebase.auth.GoogleAuthProvider();
-		this.fbaseGhub = new firebase.auth.GithubAuthProvider();
+		if ('firebase' in $window) {
+			this.fbaseGoogle = new firebase.auth.GoogleAuthProvider();
+			this.fbaseGhub = new firebase.auth.GithubAuthProvider();
+		} else {
+			this.fbaseGoogle = null;
+			this.fbaseGhub = null;
+		}
 
 		this.curModal = null;
 		this.loginForm = {};

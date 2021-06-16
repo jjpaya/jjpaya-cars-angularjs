@@ -56,10 +56,10 @@
 					<div ng-show="!loginf.usrn.$pristine && !loginf.usrn.$valid" class="err"><b>Usernames can't have those characters!</b></div>
 				</form>
 				<div class="social-login">
-					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGithub()">
+					<button ng-disabled="$ctrl.requestInProgress || !$ctrl.fbaseGhub" ng-click="$ctrl.loginGithub()">
 						<img ng-src="{{$ctrl.viewPath}}/img/ghub.png">
 					</button>
-					<button ng-disabled="$ctrl.requestInProgress" ng-click="$ctrl.loginGoogle()">
+					<button ng-disabled="$ctrl.requestInProgress || !$ctrl.fbaseGoogle" ng-click="$ctrl.loginGoogle()">
 						<img ng-src="{{$ctrl.viewPath}}/img/goog.png">
 					</button>
 				</div>

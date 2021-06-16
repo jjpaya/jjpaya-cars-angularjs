@@ -30,7 +30,7 @@
 				
 				// make the client log in at the same time
 				http_response_code(307);
-				header('Location: /api/auth/login');
+				header('Location: /api/auth/login/local');
 				
 			} catch (Exception $e) {
 				echo json_encode([

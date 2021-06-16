@@ -57,6 +57,7 @@ const requires = [
 
 window.mapLoader = new Promise((res, rej) => {
 	window.initMap = res;
+	window.errorMap = rej;
 });
 
 var jjcars = angular.module('jjcars', requires);
@@ -72,11 +73,14 @@ jjcars.run(['AppConstants', 'Credentials', '$rootScope', '$location', 'toastr',
 		(AppConstants, Credentials, $rootScope, $location, toastr) => {
 	
 	$rootScope.gmapsUrl = 'https://maps.googleapis.com/maps/api/js?callback=initMap&key=' + Credentials.api.google;
+	$rootScope.errorMap = window.errorMap;
 
-	// Initialize Firebase
-	firebase.initializeApp(Credentials.api.firebase);
-	firebase.analytics();
-	firebase.auth();
+	if ('firebase' in window) {
+		// Initialize Firebase
+		firebase.initializeApp(Credentials.api.firebase);
+		firebase.analytics();
+		firebase.auth();
+	}
 	
 	// Helper method for setting the page's title
 	$rootScope.setPageTitle = (title) => {

@@ -32,7 +32,8 @@ pShopMod.config(['$routeProvider', $routeProvider => {
 		reloadOnSearch: false,
 		resolve: {
 			gmapsLoader: ['$window', ($window) => {
-				return $window.mapLoader;
+				// ignore load errors, just wait until it is loaded or not
+				return $window.mapLoader.catch(e => e);
 			}],
 			initialCarsData: ['Cars', '$route', (Cars, $route) => {
 				return Cars.getCars($route.current.params);
