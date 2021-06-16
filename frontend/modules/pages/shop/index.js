@@ -9,6 +9,7 @@ pShopMod.controller('PageShopCtrl', [
 	'$route',
 	'$routeParams',
 	'$location',
+	'$window',
 	'initialCarsData',
 	'brands',
 	'totalCars',

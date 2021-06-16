@@ -210,6 +210,8 @@ export default class AuthService {
 			throw new Error(res.err);
 		}
 		
+		await this.updateCurrentUserInfo();
+		
 		return res;
 	}
 }

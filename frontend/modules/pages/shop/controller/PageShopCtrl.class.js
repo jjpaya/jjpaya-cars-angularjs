@@ -1,5 +1,5 @@
 export default class PageShopCtrl {
-	constructor(Cars, $scope, $route, $routeParams, $location, initialCarsData, brands, totalCars) {
+	constructor(Cars, $scope, $route, $routeParams, $location, $window, initialCarsData, brands, totalCars) {
 		this._Cars = Cars;
 		this._$scope = $scope;
 		this._$route = $route;

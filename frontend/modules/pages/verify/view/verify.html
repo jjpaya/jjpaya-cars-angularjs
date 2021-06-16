@@ -8,7 +8,7 @@
 			<div><input type="submit" ng-disabled="$ctrl.requestInProgress || $ctrl.verifyOk || !$ctrl.tokenOk" value="Verify Account"/></div>
 			<div ng-show="!$ctrl.tokenOk" class="err"><b>The token is not valid or has expired.</b></div>
 			<div ng-show="$ctrl.verifyOk === false" class="err"><b>{{$ctrl.verifyErr}}</b></div>
-			<div ng-show="$ctrl.verifyOk === true"><b>Message sent successfully!</b></div>
+			<div ng-show="$ctrl.verifyOk === true"><b>Account verified successfully!</b></div>
 		</form>
 	</div>
 </div>
