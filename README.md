@@ -4,15 +4,27 @@ Built with PHP 8, HTML/CSS/AngularJS 1.5 & SQL
 
 ## Features
 * Search bar with autocomplete
-* Shop filters (state stored in URL), order by, Google Maps locations
+* Shop filters (state stored in URL), order by, Google Maps locations, Shop details with back button
 * Carousel with most visited listings on the main page
 * Scroll to load more car brands
 * Related books from Google Books API for each listing
-* Starred items
-* Shop cart
+* Starred items (favorites)
+* Shop cart (client sided, localStorage, modal)
+* Server sided checkout confirmation (invoices and invoice lines with a copy of the car price)
 * Logging in, registering, avatars, mail verification & password reset mail
-* Verified social login using firebase
-* Admin controls
+* Verified social login using firebase (checks idToken)
+* Admin controls (with Auth Guard, Creation, Updates and Deletes with validation and modals)
+
+### Other Improvements
+* Favorites, Add to Cart and Cart popup as components
+* Header and Footer as components
+* A lot of server and client side validation
+* Custom framework using PHP8.0 features such as types and attributes
+* Checkout email receipt (confirmation)
+* Email service using MailJet
+* User sessions with JWT, current user data in localStorage
+* "Remember me" checkbox on local logins
+* Toastr popups
 
 ## Installation
 
