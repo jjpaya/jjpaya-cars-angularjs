@@ -4,7 +4,7 @@ Built with PHP 8, HTML/CSS/AngularJS 1.5 & SQL
 
 ## Features
 * Search bar with autocomplete
-* Shop filters, order by, Google Maps locations
+* Shop filters (state stored in URL), order by, Google Maps locations
 * Carousel with most visited listings on the main page
 * Scroll to load more car brands
 * Related books from Google Books API for each listing
